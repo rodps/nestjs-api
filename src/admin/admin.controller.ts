@@ -8,7 +8,6 @@ import { CreateAdminDto } from './dto/create-admin.dto';
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
-  @Public()
   @Get(':id')
   async getDetails(@Param('id') id: number): Promise<AdminDto> {
     return this.adminService
