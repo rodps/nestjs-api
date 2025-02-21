@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { Public } from 'src/auth/decorators/public.decorator';
 import { AdminDto } from './dto/admin.dto';
 import { CreateAdminDto } from './dto/create-admin.dto';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('admin')
 export class AdminController {
