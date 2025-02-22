@@ -1,7 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AdminService } from 'src/admin/admin.service';
-import { JwtDto } from './dto/jwt.dto';
 import { PasswordService } from 'src/admin/password.service';
 
 @Injectable()
@@ -12,7 +11,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signIn(email: string, pass: string): Promise<JwtDto> {
+  async signIn(email: string, pass: string): Promise<string> {
     const user = await this.adminService.getDetailsByEmail(email);
 
     const isSamePass = await this.passwordService.comparePassword(
@@ -25,9 +24,6 @@ export class AuthService {
     }
 
     const payload = { sub: user.id, username: user.username };
-
-    return {
-      accessToken: await this.jwtService.signAsync(payload),
-    };
+    return await this.jwtService.signAsync(payload);
   }
 }

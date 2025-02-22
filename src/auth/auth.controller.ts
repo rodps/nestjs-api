@@ -12,6 +12,6 @@ export class AuthController {
   @Post('login')
   async login(@Body() loginDto: LoginDto): Promise<JwtDto> {
     const { email, password } = loginDto;
-    return await this.authService.signIn(email, password);
+    return { accessToken: await this.authService.signIn(email, password) };
   }
 }
