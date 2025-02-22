@@ -55,6 +55,18 @@ describe('Admin Controller', () => {
 
       await expect(adminController.getDetails(1)).rejects.toThrow();
     });
+
+    it('should be a get method', () => {
+      expect(
+        Reflect.getMetadata('method', AdminController.prototype.getDetails),
+      ).toBe(RequestMethod.GET);
+    });
+
+    it('should be private', () => {
+      expect(
+        Reflect.getMetadata('isPublic', AdminController.prototype.getDetails),
+      ).toBeFalsy();
+    });
   });
 
   describe('create', () => {
