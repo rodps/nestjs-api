@@ -1,5 +1,6 @@
 import { Migrator } from '@mikro-orm/migrations';
 import { defineConfig } from '@mikro-orm/postgresql';
+import { NotFoundException } from '@nestjs/common';
 
 export default defineConfig({
   host: 'localhost',
@@ -14,5 +15,8 @@ export default defineConfig({
   migrations: {
     path: 'dist/database/migrations',
     pathTs: 'src/database/migrations',
+  },
+  findOneOrFailHandler: () => {
+    throw new NotFoundException('Registro não encontrado');
   },
 });

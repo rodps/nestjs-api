@@ -4,9 +4,15 @@ import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
 import config from './mikro-orm.config';
 import { AuthGuard } from './auth/auth.guard';
+import { ProdutosModule } from './produtos/produtos.module';
 
 @Module({
-  imports: [MikroOrmModule.forRoot(config), AdminModule, AuthModule],
+  imports: [
+    MikroOrmModule.forRoot(config),
+    AdminModule,
+    AuthModule,
+    ProdutosModule,
+  ],
   controllers: [],
   providers: [
     {
