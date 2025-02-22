@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import config from './mikro-orm.config';
 import { AuthGuard } from './auth/auth.guard';
 import { ProdutosModule } from './produtos/produtos.module';
+import { ClientesModule } from './clientes/clientes.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { ProdutosModule } from './produtos/produtos.module';
     AdminModule,
     AuthModule,
     ProdutosModule,
+    ClientesModule,
   ],
   controllers: [],
   providers: [
