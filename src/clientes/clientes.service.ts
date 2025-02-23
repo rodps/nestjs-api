@@ -2,6 +2,8 @@ import { EntityManager, wrap } from '@mikro-orm/postgresql';
 import { ConflictException, Injectable } from '@nestjs/common';
 import { ClientesRepository } from './clientes.repository';
 import { Cliente } from './cliente.entity';
+import { CreateClienteDto } from './dto/crate-cliente.dto';
+import { UpdateClienteDto } from './dto/update-cliente.dto';
 
 @Injectable()
 export class ClientesService {
@@ -10,12 +12,16 @@ export class ClientesService {
     private readonly em: EntityManager,
   ) {}
 
-  async create(data: Cliente): Promise<void> {
+  async create(data: CreateClienteDto): Promise<Cliente> {
     const exists = await this.clientesRepository.findOne({ email: data.email });
     if (exists) {
       throw new ConflictException('Cliente já cadastrado');
     }
-    await this.em.persistAndFlush(data);
+    const cliente = this.em.create(Cliente, {
+      ...data,
+    });
+    await this.em.flush();
+    return cliente;
   }
 
   async findAll(): Promise<Cliente[]> {
@@ -26,8 +32,15 @@ export class ClientesService {
     return this.clientesRepository.findOneOrFail(id);
   }
 
-  async update(id: number, data: Cliente): Promise<Cliente> {
+  async update(id: number, data: UpdateClienteDto): Promise<Cliente> {
     const cliente = await this.clientesRepository.findOneOrFail(id);
+    const emailExists = await this.clientesRepository.findOne({
+      email: data.email,
+      id: { $ne: id },
+    });
+    if (emailExists) {
+      throw new ConflictException('Este email já está sendo utilizado');
+    }
     wrap(cliente).assign(data, { ignoreUndefined: true });
     await this.em.flush();
     return cliente;
