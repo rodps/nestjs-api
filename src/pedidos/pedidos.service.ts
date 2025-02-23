@@ -1,5 +1,4 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
-import { InjectRepository } from '@mikro-orm/nestjs';
+import { Injectable } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/core';
 import { Pedido } from './pedido.entity';
 import { PedidoItem } from './pedido-item.entity';
@@ -8,13 +7,11 @@ import { PedidosRepository } from './pedidos.repository';
 import { ClientesRepository } from 'src/clientes/clientes.repository';
 import { ProdutoRepository } from 'src/produtos/produto.repository';
 import { PedidoItemDto } from './dto/pedido-item.dto';
-import { PedidoNaoEstaEmComposicaoError } from './errors/PedidoNaoEstaEmComposicao.error';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
 
 @Injectable()
 export class PedidosService {
   constructor(
-    @InjectRepository(Pedido)
     private readonly pedidosRepository: PedidosRepository,
     private readonly clientesRepository: ClientesRepository,
     private readonly produtosRepository: ProdutoRepository,
@@ -22,31 +19,17 @@ export class PedidosService {
   ) {}
 
   async create(pedido: CreatePedidoDto): Promise<Pedido> {
-    const cliente = await this.clientesRepository.findOne(pedido.clienteId);
-    if (!cliente) {
-      throw new UnprocessableEntityException('Cliente não encontrado');
-    }
-
+    const cliente = await this.clientesRepository.findOneOrUnprocessable(
+      pedido.clienteId,
+    );
     const novoPedido = new Pedido(cliente, pedido.endereco);
 
     for (const pedidoItem of pedido.itens) {
-      const produto = await this.produtosRepository.findOne(
+      const produto = await this.produtosRepository.findOneOrUnprocessable(
         pedidoItem.produtoId,
       );
-      if (!produto) {
-        throw new UnprocessableEntityException(
-          `Produto ${pedidoItem.produtoId} não encontrado`,
-        );
-      }
-
       const item = new PedidoItem(novoPedido, produto, pedidoItem.quantidade);
-      try {
-        novoPedido.addItem(item);
-      } catch (error) {
-        if (error instanceof PedidoNaoEstaEmComposicaoError) {
-          throw new UnprocessableEntityException(error.message);
-        }
-      }
+      novoPedido.addItem(item);
     }
 
     await this.em.persistAndFlush(novoPedido);
@@ -55,21 +38,11 @@ export class PedidosService {
 
   async addItem(id: number, item: PedidoItemDto): Promise<Pedido> {
     const pedido = await this.pedidosRepository.findOneOrFail(id);
-    const produto = await this.produtosRepository.findOne(item.produtoId);
+    const produto = await this.produtosRepository.findOneOrUnprocessable(
+      item.produtoId,
+    );
 
-    if (!produto) {
-      throw new UnprocessableEntityException(
-        `Produto ${item.produtoId} não encontrado`,
-      );
-    }
-
-    try {
-      pedido.addItem(new PedidoItem(pedido, produto, item.quantidade));
-    } catch (error) {
-      if (error instanceof PedidoNaoEstaEmComposicaoError) {
-        throw new UnprocessableEntityException(error.message);
-      }
-    }
+    pedido.addItem(new PedidoItem(pedido, produto, item.quantidade));
 
     await this.em.flush();
     return pedido;
