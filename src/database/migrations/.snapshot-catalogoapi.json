@@ -155,6 +155,108 @@
           "nullable": false,
           "mappedType": "integer"
         },
+        "cliente_id": {
+          "name": "cliente_id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "endereco": {
+          "name": "endereco",
+          "type": "varchar(255)",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 255,
+          "mappedType": "string"
+        },
+        "valor_total": {
+          "name": "valor_total",
+          "type": "double precision",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "0",
+          "mappedType": "double"
+        },
+        "status": {
+          "name": "status",
+          "type": "smallint",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "1",
+          "mappedType": "smallint"
+        },
+        "data_pedido": {
+          "name": "data_pedido",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "data_entrega": {
+          "name": "data_entrega",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 6,
+          "mappedType": "datetime"
+        }
+      },
+      "name": "pedido",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "pedido_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "pedido_cliente_id_foreign": {
+          "constraintName": "pedido_cliente_id_foreign",
+          "columnNames": [
+            "cliente_id"
+          ],
+          "localTableName": "public.pedido",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.cliente",
+          "updateRule": "cascade"
+        }
+      },
+      "nativeEnums": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "unsigned": false,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
         "nome": {
           "name": "nome",
           "type": "varchar(255)",
@@ -200,6 +302,107 @@
       ],
       "checks": [],
       "foreignKeys": {},
+      "nativeEnums": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "unsigned": false,
+          "autoincrement": true,
+          "primary": true,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "pedido_id": {
+          "name": "pedido_id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "produto_id": {
+          "name": "produto_id",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "quantidade": {
+          "name": "quantidade",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "valor_unitario": {
+          "name": "valor_unitario",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        },
+        "valor_total": {
+          "name": "valor_total",
+          "type": "int",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "integer"
+        }
+      },
+      "name": "pedido_item",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "pedido_item_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "pedido_item_pedido_id_foreign": {
+          "constraintName": "pedido_item_pedido_id_foreign",
+          "columnNames": [
+            "pedido_id"
+          ],
+          "localTableName": "public.pedido_item",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.pedido",
+          "deleteRule": "cascade",
+          "updateRule": "cascade"
+        },
+        "pedido_item_produto_id_foreign": {
+          "constraintName": "pedido_item_produto_id_foreign",
+          "columnNames": [
+            "produto_id"
+          ],
+          "localTableName": "public.pedido_item",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.produto",
+          "updateRule": "cascade"
+        }
+      },
       "nativeEnums": {}
     }
   ],

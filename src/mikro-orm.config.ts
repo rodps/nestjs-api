@@ -16,7 +16,10 @@ export default defineConfig({
     path: 'dist/database/migrations',
     pathTs: 'src/database/migrations',
   },
-  findOneOrFailHandler: () => {
-    throw new NotFoundException('Registro não encontrado');
+  findOneOrFailHandler: (entity) => {
+    throw new NotFoundException(`${entity} não encontrado`);
+  },
+  serialization: {
+    forceObject: true,
   },
 });
