@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { ProdutoService } from './produto.service';
 import { CreateProdutoDto } from './dto/create-produto.dto';
-import { ProdutoDto } from './dto/produto.dto';
 import { UpdateProdutoDto } from './dto/update-produto.dto';
 
 @Controller('produtos')
@@ -19,34 +18,23 @@ export class ProdutoController {
   constructor(private readonly produtoService: ProdutoService) {}
 
   @Post()
-  async createProduto(@Body() data: CreateProdutoDto): Promise<ProdutoDto> {
-    const produto = data.toEntity();
-    await this.produtoService.createProduto(produto);
-    return ProdutoDto.fromEntity(produto);
+  async createProduto(@Body() data: CreateProdutoDto) {
+    return await this.produtoService.createProduto(data);
   }
 
   @Get()
-  async getProdutos(): Promise<ProdutoDto[]> {
-    return (await this.produtoService.getProdutos()).map((produto) =>
-      ProdutoDto.fromEntity(produto),
-    );
+  async getProdutos() {
+    return await this.produtoService.getProdutos();
   }
 
   @Get(':id')
-  async getProdutoById(@Param('id') id: number): Promise<ProdutoDto> {
-    return await this.produtoService
-      .getProdutoById(id)
-      .then((produto) => ProdutoDto.fromEntity(produto));
+  async getProdutoById(@Param('id') id: number) {
+    return await this.produtoService.getProdutoById(id);
   }
 
   @Put(':id')
-  async updateProduto(
-    @Param('id') id: number,
-    @Body() data: UpdateProdutoDto,
-  ): Promise<ProdutoDto> {
-    const produto = data.toEntity();
-    await this.produtoService.updateProduto(id, produto);
-    return ProdutoDto.fromEntity(produto);
+  async updateProduto(@Param('id') id: number, @Body() data: UpdateProdutoDto) {
+    return await this.produtoService.updateProduto(id, data);
   }
 
   @Delete(':id')
