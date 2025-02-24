@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { PedidosService } from './pedidos.service';
 import { CreatePedidoDto } from './dto/create-pedido.dto';
-import { Pedido } from './pedido.entity';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
 
 @Controller('pedidos')
@@ -24,7 +23,7 @@ export class PedidosController {
   }
 
   @Get()
-  async findAll(): Promise<Pedido[]> {
+  async findAll() {
     return await this.pedidosService.findAll();
   }
 
