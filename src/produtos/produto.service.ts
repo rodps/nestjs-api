@@ -13,9 +13,8 @@ export class ProdutoService {
   ) {}
 
   async createProduto(data: CreateProdutoDto): Promise<Produto> {
-    const produto = new Produto();
-    wrap(produto).assign(data, { ignoreUndefined: true });
-    await this.em.persistAndFlush(produto);
+    const produto = this.em.create(Produto, data);
+    await this.em.flush();
     return produto;
   }
 
