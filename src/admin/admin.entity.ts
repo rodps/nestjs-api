@@ -14,7 +14,7 @@ export class Admin {
   @Property()
   username: string;
 
-  @Property()
+  @Property({ hidden: true })
   password: string;
 
   @Property()

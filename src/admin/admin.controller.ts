@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { AdminDto } from './dto/admin.dto';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
 
@@ -9,16 +8,13 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Get(':id')
-  async getDetails(@Param('id') id: number): Promise<AdminDto> {
-    return this.adminService
-      .getDetailsById(id)
-      .then((admin) => AdminDto.fromEntity(admin));
+  async getDetails(@Param('id') id: number) {
+    return await this.adminService.getDetailsById(id);
   }
 
   @Public()
   @Post()
-  async create(@Body() createAdminDto: CreateAdminDto): Promise<AdminDto> {
-    const admin = createAdminDto.toEntity();
-    return this.adminService.save(admin).then(() => AdminDto.fromEntity(admin));
+  async create(@Body() data: CreateAdminDto) {
+    return await this.adminService.save(data);
   }
 }

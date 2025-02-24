@@ -1,12 +1,9 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { AdminRepository } from './admin.repository';
 import { Admin } from './admin.entity';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { PasswordService } from './password.service';
+import { CreateAdminDto } from './dto/create-admin.dto';
 
 @Injectable()
 export class AdminService {
@@ -17,36 +14,27 @@ export class AdminService {
   ) {}
 
   async getDetailsById(id: number): Promise<Admin> {
-    const admin = await this.adminRepository.findOne(id);
-
-    if (!admin) {
-      throw new NotFoundException('Usuário não encontrado');
-    }
-
-    return admin;
+    return await this.adminRepository.findOneOrFail(id);
   }
 
   async getDetailsByEmail(email: string): Promise<Admin> {
-    const admin = await this.adminRepository.findOne({ email });
-
-    if (!admin) {
-      throw new NotFoundException('Usuário não encontrado');
-    }
-
-    return admin;
+    return await this.adminRepository.findOneOrFail({ email });
   }
 
-  async save(admin: Admin): Promise<void> {
-    const exists = await this.adminRepository.count({
-      email: admin.email,
+  async save(data: CreateAdminDto): Promise<Admin> {
+    const exists = await this.adminRepository.findOne({
+      email: data.email,
     });
-
-    if (exists > 0) {
+    if (exists) {
       throw new ConflictException('Usuário já cadastrado');
     }
 
-    admin.password = await this.passwordService.hashPassword(admin.password);
+    const admin = this.em.create(Admin, {
+      ...data,
+      password: await this.passwordService.hashPassword(data.password),
+    });
 
-    await this.em.persistAndFlush(admin);
+    await this.em.flush();
+    return admin;
   }
 }

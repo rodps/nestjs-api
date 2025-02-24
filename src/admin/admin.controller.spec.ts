@@ -72,18 +72,19 @@ describe('Admin Controller', () => {
   describe('create', () => {
     it('should call save from AdminService', async () => {
       const adminDto = new CreateAdminDto();
-      jest.spyOn(adminService, 'save').mockResolvedValue();
+      jest.spyOn(adminService, 'save').mockResolvedValue(new Admin());
 
       await adminController.create(adminDto);
 
-      expect(adminService.save).toHaveBeenCalledWith(adminDto.toEntity());
+      expect(adminService.save).toHaveBeenCalledWith(adminDto);
     });
 
     it('should return the created admin', async () => {
       const adminDto = new CreateAdminDto();
       adminDto.email = 'test@email.com';
-      const admin = adminDto.toEntity();
-      jest.spyOn(adminService, 'save').mockResolvedValue();
+      const admin = new Admin();
+      admin.email = adminDto.email;
+      jest.spyOn(adminService, 'save').mockResolvedValue(admin);
 
       const result = await adminController.create(adminDto);
 

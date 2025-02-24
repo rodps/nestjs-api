@@ -6,6 +6,7 @@ import { ConflictException, NotFoundException } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Admin } from './admin.entity';
 import { PasswordService } from './password.service';
+import { CreateAdminDto } from './dto/create-admin.dto';
 
 describe('AdminService', () => {
   let adminService: AdminService;
@@ -20,15 +21,16 @@ describe('AdminService', () => {
         {
           provide: AdminRepository,
           useValue: {
+            findOneOrFail: jest.fn(),
             findOne: jest.fn(),
-            count: jest.fn(),
             getEntityManager: jest.fn(),
           },
         },
         {
           provide: EntityManager,
           useValue: {
-            persistAndFlush: jest.fn(),
+            flush: jest.fn(),
+            create: jest.fn(),
           },
         },
         {
@@ -49,12 +51,16 @@ describe('AdminService', () => {
   describe('getDetailsById', () => {
     it('should return an admin by id', async () => {
       const admin = { id: 1 };
-      jest.spyOn(adminRepository, 'findOne').mockResolvedValue(admin);
+      jest.spyOn(adminRepository, 'findOneOrFail').mockResolvedValue(admin);
 
       expect(await adminService.getDetailsById(1)).toBe(admin);
     });
 
     it('should throw an error if admin is not found', async () => {
+      jest
+        .spyOn(adminRepository, 'findOneOrFail')
+        .mockRejectedValueOnce(new NotFoundException());
+
       await expect(adminService.getDetailsById(1)).rejects.toThrow(
         NotFoundException,
       );
@@ -64,15 +70,21 @@ describe('AdminService', () => {
   describe('getDetailsByEmail', () => {
     it('should return an admin by email', async () => {
       const admin = { email: 'test@mail.com' };
-      jest.spyOn(adminRepository, 'findOne').mockResolvedValue(admin);
+      jest.spyOn(adminRepository, 'findOneOrFail').mockResolvedValue(admin);
 
-      expect(await adminService.getDetailsByEmail(admin.email)).toBe(admin);
-      expect(adminRepository.findOne).toHaveBeenCalledWith({
+      const result = await adminService.getDetailsByEmail(admin.email);
+
+      expect(result).toBe(admin);
+      expect(adminRepository.findOneOrFail).toHaveBeenCalledWith({
         email: admin.email,
       });
     });
 
     it('should throw an error if admin is not found', async () => {
+      jest
+        .spyOn(adminRepository, 'findOneOrFail')
+        .mockRejectedValueOnce(new NotFoundException());
+
       await expect(
         adminService.getDetailsByEmail('test@email.com'),
       ).rejects.toThrow(NotFoundException);
@@ -81,28 +93,29 @@ describe('AdminService', () => {
 
   describe('save', () => {
     it('should save an admin', async () => {
-      const admin = new Admin();
+      const admin = new CreateAdminDto();
       admin.email = 'test@email.com';
       admin.password = '123456';
-      jest.spyOn(adminRepository, 'count').mockResolvedValue(0);
-      jest.spyOn(entityManager, 'persistAndFlush').mockResolvedValue(undefined);
+      jest.spyOn(adminRepository, 'findOne').mockResolvedValue(null);
       jest
         .spyOn(passwordService, 'hashPassword')
         .mockResolvedValue('hashedPassword');
 
       await adminService.save(admin);
-      expect(adminRepository.count).toHaveBeenCalledWith({
+      expect(adminRepository.findOne).toHaveBeenCalledWith({
         email: admin.email,
       });
-      expect(entityManager.persistAndFlush).toHaveBeenCalledWith(admin);
+      expect(entityManager.create).toHaveBeenCalledWith(Admin, {
+        ...admin,
+        password: 'hashedPassword',
+      });
       expect(passwordService.hashPassword).toHaveBeenCalledWith('123456');
-      expect(admin.password).toBe('hashedPassword');
     });
 
     it('should throw an error if admin already exists', async () => {
       const admin = new Admin();
       admin.email = 'test@admin.com';
-      jest.spyOn(adminRepository, 'count').mockResolvedValue(1);
+      jest.spyOn(adminRepository, 'findOne').mockResolvedValue(admin);
 
       await expect(adminService.save(admin)).rejects.toThrow(ConflictException);
     });
