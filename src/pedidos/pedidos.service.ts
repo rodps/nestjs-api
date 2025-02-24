@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/core';
 import { Pedido } from './pedido.entity';
 import { PedidoItem } from './pedido-item.entity';
@@ -19,15 +19,11 @@ export class PedidosService {
   ) {}
 
   async create(pedido: CreatePedidoDto): Promise<Pedido> {
-    const cliente = await this.clientesRepository.findOneOrUnprocessable(
-      pedido.clienteId,
-    );
+    const cliente = await this.findCliente(pedido.clienteId);
     const novoPedido = new Pedido(cliente, pedido.endereco);
 
     for (const pedidoItem of pedido.itens) {
-      const produto = await this.produtosRepository.findOneOrUnprocessable(
-        pedidoItem.produtoId,
-      );
+      const produto = await this.findProduto(pedidoItem.produtoId);
       const item = new PedidoItem(novoPedido, produto, pedidoItem.quantidade);
       novoPedido.addItem(item);
     }
@@ -38,9 +34,7 @@ export class PedidosService {
 
   async addItem(id: number, item: PedidoItemDto): Promise<Pedido> {
     const pedido = await this.pedidosRepository.findOneOrFail(id);
-    const produto = await this.produtosRepository.findOneOrUnprocessable(
-      item.produtoId,
-    );
+    const produto = await this.findProduto(item.produtoId);
 
     pedido.addItem(new PedidoItem(pedido, produto, item.quantidade));
 
@@ -70,5 +64,21 @@ export class PedidosService {
   async remove(id: number): Promise<void> {
     const pedido = await this.pedidosRepository.findOneOrFail(id);
     await this.em.removeAndFlush(pedido);
+  }
+
+  private async findCliente(id: number) {
+    return await this.clientesRepository.findOneOrFail(id, {
+      failHandler: () => {
+        throw new UnprocessableEntityException(`Cliente ${id} nao encontrado`);
+      },
+    });
+  }
+
+  private async findProduto(id: number) {
+    return await this.produtosRepository.findOneOrFail(id, {
+      failHandler: () => {
+        throw new UnprocessableEntityException(`Produto ${id} nao encontrado`);
+      },
+    });
   }
 }
