@@ -3,10 +3,22 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { RequestMethod } from '@nestjs/common';
+import { LoginDto } from './dto/login.dto';
 
 describe('AuthController', () => {
   let controller: AuthController;
   let authService: AuthService;
+
+  const makeLoginDto = () => {
+    const loginDto = new LoginDto();
+    loginDto.email = 'test@email.com';
+    loginDto.password = '123456';
+    return loginDto;
+  };
+
+  const mockAuthService = {
+    signIn: jest.fn(() => 'token'),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -14,9 +26,7 @@ describe('AuthController', () => {
       providers: [
         {
           provide: AuthService,
-          useValue: {
-            signIn: jest.fn(),
-          },
+          useValue: mockAuthService,
         },
       ],
     }).compile();
@@ -31,16 +41,15 @@ describe('AuthController', () => {
 
   describe('login', () => {
     it('should return a JWT token', async () => {
-      const loginDto = { email: 'test@email.com', password: 'password' };
-      const jwtDto = { accessToken: 'token' };
-      jest.spyOn(authService, 'signIn').mockResolvedValue(jwtDto.accessToken);
+      const loginDto = makeLoginDto();
 
-      expect(await controller.login(loginDto)).toEqual(jwtDto);
+      expect(await controller.login(loginDto)).toEqual({
+        accessToken: 'token',
+      });
     });
 
     it('should call authService.signIn with correct arguments', async () => {
-      const loginDto = { email: 'test@email.com', password: 'password' };
-      jest.spyOn(authService, 'signIn').mockResolvedValue('token');
+      const loginDto = makeLoginDto();
 
       await controller.login(loginDto);
 
@@ -51,8 +60,8 @@ describe('AuthController', () => {
     });
 
     it('should throw an error if authService.signIn throws an error', async () => {
-      const loginDto = { email: 'test@mail.com', password: 'password' };
-      jest.spyOn(authService, 'signIn').mockRejectedValue(new Error());
+      const loginDto = makeLoginDto();
+      jest.spyOn(authService, 'signIn').mockRejectedValueOnce(new Error());
 
       await expect(controller.login(loginDto)).rejects.toThrow();
     });
