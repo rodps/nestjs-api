@@ -13,7 +13,7 @@ export class AuthService {
   ) {}
 
   async signIn(email: string, pass: string): Promise<string> {
-    const user = await this.adminService.getDetailsByEmail(email);
+    const user = await this.adminService.findOneByEmail(email);
 
     const isSamePass = await this.passwordService.comparePassword(
       pass,

@@ -8,12 +8,13 @@ import { Admin } from 'src/admin/admin.entity';
 import { UnauthorizedException } from '@nestjs/common';
 
 const getFakeAdmin = () => {
-  const user = new Admin();
-  user.id = 1;
-  user.username = 'test';
-  user.password = 'hashedPassword';
-  user.email = 'test@mail.com';
-  return user;
+  const admin = new Admin({
+    username: 'test',
+    password: 'hashedPassword',
+    email: 'test@mail.com',
+  });
+  admin.id = 1;
+  return admin;
 };
 
 describe('AuthService', () => {
@@ -29,7 +30,7 @@ describe('AuthService', () => {
         {
           provide: AdminService,
           useValue: {
-            getDetailsByEmail: jest.fn(),
+            findOneByEmail: jest.fn(),
           },
         },
         {
@@ -58,7 +59,7 @@ describe('AuthService', () => {
       const email = 'test@mail.com';
       const pass = 'password';
       const user = getFakeAdmin();
-      jest.spyOn(adminService, 'getDetailsByEmail').mockResolvedValue(user);
+      jest.spyOn(adminService, 'findOneByEmail').mockResolvedValue(user);
       jest.spyOn(passwordService, 'comparePassword').mockResolvedValue(false);
 
       await expect(authService.signIn(email, pass)).rejects.toThrow(
@@ -70,31 +71,31 @@ describe('AuthService', () => {
       const email = 'test@mail.com';
       const pass = 'password';
       const user = getFakeAdmin();
-      jest.spyOn(adminService, 'getDetailsByEmail').mockResolvedValue(user);
+      jest.spyOn(adminService, 'findOneByEmail').mockResolvedValue(user);
       jest.spyOn(passwordService, 'comparePassword').mockResolvedValue(true);
       jest.spyOn(jwtService, 'signAsync').mockResolvedValue('token');
 
       expect(await authService.signIn(email, pass)).toBe('token');
     });
 
-    it('should call getDetailsByEmail with correct arguments', async () => {
+    it('should call findOneByEmail with correct arguments', async () => {
       const email = 'test@mail.com';
       const pass = 'password';
       const user = getFakeAdmin();
-      jest.spyOn(adminService, 'getDetailsByEmail').mockResolvedValue(user);
+      jest.spyOn(adminService, 'findOneByEmail').mockResolvedValue(user);
       jest.spyOn(passwordService, 'comparePassword').mockResolvedValue(true);
       jest.spyOn(jwtService, 'signAsync').mockResolvedValue('token');
 
       await authService.signIn(email, pass);
 
-      expect(adminService.getDetailsByEmail).toHaveBeenCalledWith(email);
+      expect(adminService.findOneByEmail).toHaveBeenCalledWith(email);
     });
 
     it('should call comparePassword with correct arguments', async () => {
       const email = 'test@mail.com';
       const pass = 'password';
       const user = getFakeAdmin();
-      jest.spyOn(adminService, 'getDetailsByEmail').mockResolvedValue(user);
+      jest.spyOn(adminService, 'findOneByEmail').mockResolvedValue(user);
       jest.spyOn(passwordService, 'comparePassword').mockResolvedValue(true);
       jest.spyOn(jwtService, 'signAsync').mockResolvedValue('token');
 
@@ -110,7 +111,7 @@ describe('AuthService', () => {
       const email = 'test@mail.com';
       const pass = 'password';
       const user = getFakeAdmin();
-      jest.spyOn(adminService, 'getDetailsByEmail').mockResolvedValue(user);
+      jest.spyOn(adminService, 'findOneByEmail').mockResolvedValue(user);
       jest.spyOn(passwordService, 'comparePassword').mockResolvedValue(true);
       jest.spyOn(jwtService, 'signAsync').mockResolvedValue('token');
 

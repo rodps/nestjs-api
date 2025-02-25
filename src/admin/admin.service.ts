@@ -13,15 +13,15 @@ export class AdminService {
     private readonly passwordService: PasswordService,
   ) {}
 
-  async getDetailsById(id: number): Promise<Admin> {
+  async findOne(id: number): Promise<Admin> {
     return await this.adminRepository.findOneOrFail(id);
   }
 
-  async getDetailsByEmail(email: string): Promise<Admin> {
+  async findOneByEmail(email: string): Promise<Admin> {
     return await this.adminRepository.findOneOrFail({ email });
   }
 
-  async save(data: CreateAdminDto): Promise<Admin> {
+  async create(data: CreateAdminDto): Promise<Admin> {
     const exists = await this.adminRepository.findOne({
       email: data.email,
     });
@@ -29,12 +29,12 @@ export class AdminService {
       throw new ConflictException('Usuário já cadastrado');
     }
 
-    const admin = this.em.create(Admin, {
+    const admin = new Admin({
       ...data,
       password: await this.passwordService.hashPassword(data.password),
     });
 
-    await this.em.flush();
+    await this.em.persistAndFlush(admin);
     return admin;
   }
 }

@@ -8,13 +8,13 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Get(':id')
-  async getDetails(@Param('id') id: number) {
-    return await this.adminService.getDetailsById(id);
+  async findOne(@Param('id') id: number) {
+    return await this.adminService.findOne(id);
   }
 
   @Public()
   @Post()
   async create(@Body() data: CreateAdminDto) {
-    return await this.adminService.save(data);
+    return await this.adminService.create(data);
   }
 }

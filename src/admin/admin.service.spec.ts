@@ -11,8 +11,36 @@ import { CreateAdminDto } from './dto/create-admin.dto';
 describe('AdminService', () => {
   let adminService: AdminService;
   let adminRepository: AdminRepository;
-  let entityManager: EntityManager;
   let passwordService: PasswordService;
+  let entityManager: EntityManager;
+
+  const makeAdminDto = () => {
+    const adminDto = new CreateAdminDto();
+    adminDto.email = 'test@email.com';
+    adminDto.password = '123456';
+    adminDto.username = 'test';
+    return adminDto;
+  };
+
+  const mockAdmin = new Admin({
+    id: 1,
+    email: 'test@email.com',
+    username: 'test',
+    password: '123456',
+  });
+
+  const mockAdminRepository = {
+    findOneOrFail: jest.fn(() => mockAdmin),
+    findOne: jest.fn(() => null),
+  };
+
+  const mockEntityManager = {
+    persistAndFlush: jest.fn(),
+  };
+
+  const mockPasswordService = {
+    hashPassword: jest.fn(() => 'hashedPassword'),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -20,40 +48,28 @@ describe('AdminService', () => {
         AdminService,
         {
           provide: AdminRepository,
-          useValue: {
-            findOneOrFail: jest.fn(),
-            findOne: jest.fn(),
-            getEntityManager: jest.fn(),
-          },
+          useValue: mockAdminRepository,
         },
         {
           provide: EntityManager,
-          useValue: {
-            flush: jest.fn(),
-            create: jest.fn(),
-          },
+          useValue: mockEntityManager,
         },
         {
           provide: PasswordService,
-          useValue: {
-            hashPassword: jest.fn(),
-          },
+          useValue: mockPasswordService,
         },
       ],
     }).compile();
 
     adminService = module.get<AdminService>(AdminService);
     adminRepository = module.get<AdminRepository>(AdminRepository);
-    entityManager = module.get<EntityManager>(EntityManager);
     passwordService = module.get<PasswordService>(PasswordService);
+    entityManager = module.get<EntityManager>(EntityManager);
   });
 
-  describe('getDetailsById', () => {
+  describe('findOne', () => {
     it('should return an admin by id', async () => {
-      const admin = { id: 1 };
-      jest.spyOn(adminRepository, 'findOneOrFail').mockResolvedValue(admin);
-
-      expect(await adminService.getDetailsById(1)).toBe(admin);
+      expect(await adminService.findOne(1)).toBe(mockAdmin);
     });
 
     it('should throw an error if admin is not found', async () => {
@@ -61,22 +77,24 @@ describe('AdminService', () => {
         .spyOn(adminRepository, 'findOneOrFail')
         .mockRejectedValueOnce(new NotFoundException());
 
-      await expect(adminService.getDetailsById(1)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(adminService.findOne(1)).rejects.toThrow(NotFoundException);
     });
   });
 
-  describe('getDetailsByEmail', () => {
+  describe('findOneByEmail', () => {
     it('should return an admin by email', async () => {
-      const admin = { email: 'test@mail.com' };
-      jest.spyOn(adminRepository, 'findOneOrFail').mockResolvedValue(admin);
+      const result = await adminService.findOneByEmail('test@email.com');
 
-      const result = await adminService.getDetailsByEmail(admin.email);
+      expect(result).toBe(mockAdmin);
+    });
 
-      expect(result).toBe(admin);
+    it('should call findOneOrFail with correct arguments', async () => {
+      const email = 'test@email.com';
+
+      await adminService.findOneByEmail(email);
+
       expect(adminRepository.findOneOrFail).toHaveBeenCalledWith({
-        email: admin.email,
+        email,
       });
     });
 
@@ -86,38 +104,49 @@ describe('AdminService', () => {
         .mockRejectedValueOnce(new NotFoundException());
 
       await expect(
-        adminService.getDetailsByEmail('test@email.com'),
+        adminService.findOneByEmail('test@email.com'),
       ).rejects.toThrow(NotFoundException);
     });
   });
 
-  describe('save', () => {
-    it('should save an admin', async () => {
-      const admin = new CreateAdminDto();
-      admin.email = 'test@email.com';
-      admin.password = '123456';
-      jest.spyOn(adminRepository, 'findOne').mockResolvedValue(null);
-      jest
-        .spyOn(passwordService, 'hashPassword')
-        .mockResolvedValue('hashedPassword');
+  describe('create', () => {
+    it('should return the created admin', async () => {
+      const admin = makeAdminDto();
 
-      await adminService.save(admin);
+      const result = await adminService.create(admin);
+
+      expect(entityManager.persistAndFlush).toHaveBeenCalledWith(result);
+      expect(result.email).toBe(admin.email);
+      expect(result.username).toBe(admin.username);
+      expect(result.password).toBe('hashedPassword');
+    });
+
+    it('should call findOne with correct arguments', async () => {
+      const admin = makeAdminDto();
+
+      await adminService.create(admin);
+
       expect(adminRepository.findOne).toHaveBeenCalledWith({
         email: admin.email,
       });
-      expect(entityManager.create).toHaveBeenCalledWith(Admin, {
-        ...admin,
-        password: 'hashedPassword',
-      });
-      expect(passwordService.hashPassword).toHaveBeenCalledWith('123456');
     });
 
-    it('should throw an error if admin already exists', async () => {
-      const admin = new Admin();
-      admin.email = 'test@admin.com';
+    it('should call hashPassword with correct arguments', async () => {
+      const admin = makeAdminDto();
+
+      await adminService.create(admin);
+
+      expect(passwordService.hashPassword).toHaveBeenCalledWith(admin.password);
+    });
+
+    it('should throw an error if email is already in use', async () => {
+      const admin = makeAdminDto();
+
       jest.spyOn(adminRepository, 'findOne').mockResolvedValue(admin);
 
-      await expect(adminService.save(admin)).rejects.toThrow(ConflictException);
+      await expect(adminService.create(admin)).rejects.toThrow(
+        ConflictException,
+      );
     });
   });
 });

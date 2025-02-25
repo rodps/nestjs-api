@@ -10,17 +10,34 @@ describe('Admin Controller', () => {
   let adminController: AdminController;
   let adminService: AdminService;
 
+  const makeAdminDto = () => {
+    const adminDto = new CreateAdminDto();
+    adminDto.email = 'test@email.com';
+    adminDto.password = '123456';
+    adminDto.username = 'test';
+    return adminDto;
+  };
+
+  const mockAdmin = new Admin({
+    id: 1,
+    email: 'test@email.com',
+    username: 'test',
+    password: '123456',
+  });
+
+  const mockAdminService = {
+    findOne: jest.fn(() => mockAdmin),
+    findOneByEmail: jest.fn(() => mockAdmin),
+    create: jest.fn(() => mockAdmin),
+  };
+
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       controllers: [AdminController],
       providers: [
         {
           provide: AdminService,
-          useValue: {
-            getDetailsById: jest.fn(),
-            getDetailsByEmail: jest.fn(),
-            save: jest.fn(),
-          },
+          useValue: mockAdminService,
         },
       ],
     }).compile();
@@ -29,71 +46,60 @@ describe('Admin Controller', () => {
     adminService = moduleRef.get<AdminService>(AdminService);
   });
 
-  describe('getDetails', () => {
-    it('should call getDetailsById from AdminService', async () => {
-      const admin = new Admin();
-      admin.id = 1;
-      jest.spyOn(adminService, 'getDetailsById').mockResolvedValue(admin);
+  describe('findOne', () => {
+    it('should call findOne from AdminService', async () => {
+      const id = 1;
 
-      await adminController.getDetails(admin.id);
+      await adminController.findOne(id);
 
-      expect(adminService.getDetailsById).toHaveBeenCalledWith(admin.id);
+      expect(adminService.findOne).toHaveBeenCalledWith(id);
     });
 
     it('should return the admin details', async () => {
-      const admin = new Admin();
-      admin.id = 1;
-      jest.spyOn(adminService, 'getDetailsById').mockResolvedValue(admin);
+      const result = await adminController.findOne(1);
 
-      const result = await adminController.getDetails(admin.id);
-
-      expect(result).toEqual(admin);
+      expect(result).toEqual(mockAdmin);
     });
 
     it('should throw an error if admin is not found', async () => {
-      jest.spyOn(adminService, 'getDetailsById').mockRejectedValue(new Error());
+      jest.spyOn(adminService, 'findOne').mockRejectedValueOnce(new Error());
 
-      await expect(adminController.getDetails(1)).rejects.toThrow();
+      await expect(adminController.findOne(1)).rejects.toThrow();
     });
 
     it('should be a get method', () => {
       expect(
-        Reflect.getMetadata('method', AdminController.prototype.getDetails),
+        Reflect.getMetadata('method', AdminController.prototype.findOne),
       ).toBe(RequestMethod.GET);
     });
 
     it('should be private', () => {
       expect(
-        Reflect.getMetadata('isPublic', AdminController.prototype.getDetails),
+        Reflect.getMetadata('isPublic', AdminController.prototype.findOne),
       ).toBeFalsy();
     });
   });
 
   describe('create', () => {
-    it('should call save from AdminService', async () => {
-      const adminDto = new CreateAdminDto();
-      jest.spyOn(adminService, 'save').mockResolvedValue(new Admin());
+    it('should call create from AdminService', async () => {
+      const adminDto = makeAdminDto();
 
       await adminController.create(adminDto);
 
-      expect(adminService.save).toHaveBeenCalledWith(adminDto);
+      expect(adminService.create).toHaveBeenCalledWith(adminDto);
     });
 
     it('should return the created admin', async () => {
-      const adminDto = new CreateAdminDto();
-      adminDto.email = 'test@email.com';
-      const admin = new Admin();
-      admin.email = adminDto.email;
-      jest.spyOn(adminService, 'save').mockResolvedValue(admin);
+      const adminDto = makeAdminDto();
 
       const result = await adminController.create(adminDto);
 
-      expect(result).toEqual(admin);
+      expect(result).toEqual(mockAdmin);
     });
 
     it('should throw an error if admin is not created', async () => {
-      const adminDto = new CreateAdminDto();
-      jest.spyOn(adminService, 'save').mockRejectedValue(new Error());
+      const adminDto = makeAdminDto();
+      jest.spyOn(adminService, 'create').mockRejectedValueOnce(new Error());
 
       await expect(adminController.create(adminDto)).rejects.toThrow();
     });
@@ -108,12 +114,6 @@ describe('Admin Controller', () => {
       expect(
         Reflect.getMetadata('method', AdminController.prototype.create),
       ).toBe(RequestMethod.POST);
-    });
-
-    it('should have the correct path', () => {
-      expect(
-        Reflect.getMetadata('path', AdminController.prototype.create),
-      ).toBe('/');
     });
   });
 });

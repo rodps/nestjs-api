@@ -1,10 +1,12 @@
-import {
-  Entity,
-  EntityRepositoryType,
-  PrimaryKey,
-  Property,
-} from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 import { AdminRepository } from './admin.repository';
+
+export type AdminData = {
+  id?: number;
+  username: string;
+  password: string;
+  email: string;
+};
 
 @Entity({ repository: () => AdminRepository })
 export class Admin {
@@ -20,5 +22,7 @@ export class Admin {
   @Property()
   email: string;
 
-  [EntityRepositoryType]?: AdminRepository;
+  constructor(data: AdminData) {
+    Object.assign(this, data);
+  }
 }
