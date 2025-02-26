@@ -18,10 +18,10 @@ export class PedidoItem {
   @Property()
   quantidade: number;
 
-  @Property()
+  @Property({ columnType: 'numeric(10,2)' })
   valorUnitario: number;
 
-  @Property()
+  @Property({ columnType: 'numeric(10,2)' })
   valorTotal: number;
 
   constructor(pedido: Pedido, produto: Produto, quantidade: number) {

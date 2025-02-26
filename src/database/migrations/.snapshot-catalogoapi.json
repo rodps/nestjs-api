@@ -176,13 +176,15 @@
         },
         "valor_total": {
           "name": "valor_total",
-          "type": "double precision",
+          "type": "numeric(10,2)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
+          "precision": 10,
+          "scale": 2,
           "default": "0",
-          "mappedType": "double"
+          "mappedType": "decimal"
         },
         "status": {
           "name": "status",
@@ -344,21 +346,25 @@
         },
         "valor_unitario": {
           "name": "valor_unitario",
-          "type": "int",
+          "type": "numeric(10,2)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "integer"
+          "precision": 10,
+          "scale": 2,
+          "mappedType": "decimal"
         },
         "valor_total": {
           "name": "valor_total",
-          "type": "int",
+          "type": "numeric(10,2)",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": false,
-          "mappedType": "integer"
+          "precision": 10,
+          "scale": 2,
+          "mappedType": "decimal"
         }
       },
       "name": "pedido_item",

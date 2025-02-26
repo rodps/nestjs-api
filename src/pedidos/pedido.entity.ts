@@ -37,7 +37,7 @@ export class Pedido {
   @Property()
   endereco: string;
 
-  @Property({ type: 'double' })
+  @Property({ columnType: 'numeric(10,2)' })
   valorTotal: number;
 
   @Property({
