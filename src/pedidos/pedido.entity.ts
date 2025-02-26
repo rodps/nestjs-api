@@ -10,8 +10,6 @@ import { Cliente } from '../clientes/cliente.entity';
 import { PedidoItem } from './pedido-item.entity';
 import { PedidosRepository } from './pedidos.repository';
 import { PedidoNaoEstaEmComposicaoError } from './errors/PedidoNaoEstaEmComposicao.error';
-import { QuantidadeZeroError } from './errors/QuantidadeZeroError';
-import { EstoqueInsuficienteError } from './errors/EstoqueInsuficiente.error';
 
 export enum PedidoStatus {
   EM_COMPOSICAO = 1,
@@ -65,12 +63,6 @@ export class Pedido {
   addItem(item: PedidoItem): void {
     if (this.status !== PedidoStatus.EM_COMPOSICAO) {
       throw new PedidoNaoEstaEmComposicaoError();
-    }
-    if (item.quantidade <= 0) {
-      throw new QuantidadeZeroError();
-    }
-    if (item.quantidade > item.produto.estoque) {
-      throw new EstoqueInsuficienteError();
     }
     this.itens.add(item);
     this.valorTotal += item.valorTotal;
