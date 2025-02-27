@@ -33,6 +33,8 @@ jest.mock('./pedido-item.entity', () => {
 describe('PedidosService', () => {
   let pedidosService: PedidosService;
   let entityManager: EntityManager;
+  let clientesRepository: ClientesRepository;
+  let produtosRepository: ProdutoRepository;
 
   const cliente = new Cliente({
     id: 1,
@@ -108,10 +110,8 @@ describe('PedidosService', () => {
 
     pedidosService = module.get<PedidosService>(PedidosService);
     entityManager = module.get<EntityManager>(EntityManager);
-  });
-
-  it('should be defined', () => {
-    expect(pedidosService).toBeDefined();
+    clientesRepository = module.get<ClientesRepository>(ClientesRepository);
+    produtosRepository = module.get<ProdutoRepository>(ProdutoRepository);
   });
 
   describe('create', () => {
@@ -137,6 +137,22 @@ describe('PedidosService', () => {
       await pedidosService.create(dto);
 
       expect(entityManager.persistAndFlush).toHaveBeenCalledWith(pedidoMock);
+    });
+
+    it('should throw an error if Cliente is not found', async () => {
+      jest
+        .spyOn(clientesRepository, 'findOneOrFail')
+        .mockRejectedValueOnce(new Error());
+
+      await expect(pedidosService.create(dto)).rejects.toThrow();
+    });
+
+    it('should throw an error if Produto is not found', async () => {
+      jest
+        .spyOn(produtosRepository, 'findOneOrFail')
+        .mockRejectedValueOnce(new Error());
+
+      await expect(pedidosService.create(dto)).rejects.toThrow();
     });
   });
 });
