@@ -22,4 +22,7 @@ export default defineConfig({
   serialization: {
     forceObject: true,
   },
+  assign: {
+    ignoreUndefined: true,
+  },
 });

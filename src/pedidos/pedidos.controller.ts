@@ -8,10 +8,12 @@ import {
   Param,
   Patch,
   Post,
+  Put,
 } from '@nestjs/common';
 import { PedidosService } from './pedidos.service';
 import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
+import { PedidoItemDto } from './dto/pedido-item.dto';
 
 @Controller('pedidos')
 export class PedidosController {
@@ -41,5 +43,10 @@ export class PedidosController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: number) {
     return await this.pedidosService.remove(id);
+  }
+
+  @Put(':id/itens')
+  async updateItens(@Param('id') id: number, @Body() data: PedidoItemDto) {
+    return await this.pedidosService.updateItens(id, data);
   }
 }

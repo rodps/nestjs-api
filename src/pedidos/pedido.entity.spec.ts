@@ -46,25 +46,25 @@ describe('PedidoEntity', () => {
   });
 
   describe('addItem', () => {
-    it('should add an item', () => {
+    it('should add an item', async () => {
       const pedido = new Pedido(cliente, 'Rua 1');
       const pedidoItem = new PedidoItem(pedido, produto, 1);
 
-      pedido.addItem(pedidoItem);
+      await pedido.addItem(pedidoItem);
 
       expect(pedido.itens.length).toBe(1);
       expect(pedido.itens[0]).toBe(pedidoItem);
       expect(pedido.valorTotal).toBe(10);
     });
 
-    it('should throw an error if PedidoStatus is not EM_COMPOSICAO', () => {
+    it('should throw an error if PedidoStatus is not EM_COMPOSICAO', async () => {
       const pedido = new Pedido(cliente, 'Rua 1');
       pedido.status = PedidoStatus.AGUARDANDO_PAGAMENTO;
       const pedidoItem = new PedidoItem(pedido, produto, 1);
 
-      expect(() => {
-        pedido.addItem(pedidoItem);
-      }).toThrow(PedidoNaoEstaEmComposicaoError);
+      await expect(pedido.addItem(pedidoItem)).rejects.toThrow(
+        PedidoNaoEstaEmComposicaoError,
+      );
     });
   });
 });

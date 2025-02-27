@@ -25,18 +25,18 @@ export class PedidosService {
     for (const pedidoItem of pedido.itens) {
       const produto = await this.findProduto(pedidoItem.produtoId);
       const item = new PedidoItem(novoPedido, produto, pedidoItem.quantidade);
-      novoPedido.addItem(item);
+      await novoPedido.addItem(item);
     }
 
     await this.em.persistAndFlush(novoPedido);
     return novoPedido;
   }
 
-  async addItem(id: number, item: PedidoItemDto): Promise<Pedido> {
+  async updateItens(id: number, item: PedidoItemDto): Promise<Pedido> {
     const pedido = await this.pedidosRepository.findOneOrFail(id);
     const produto = await this.findProduto(item.produtoId);
 
-    pedido.addItem(new PedidoItem(pedido, produto, item.quantidade));
+    await pedido.addItem(new PedidoItem(pedido, produto, item.quantidade));
 
     await this.em.flush();
     return pedido;
