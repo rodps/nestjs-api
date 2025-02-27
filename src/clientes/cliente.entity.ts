@@ -17,4 +17,14 @@ export class Cliente {
 
   @Property()
   endereco: string;
+
+  constructor(data: {
+    id?: number;
+    nome: string;
+    email: string;
+    telefone: string;
+    endereco: string;
+  }) {
+    Object.assign(this, data);
+  }
 }

@@ -1,5 +1,5 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
-import { EntityManager } from '@mikro-orm/core';
+import { EntityManager } from '@mikro-orm/postgresql';
 import { Pedido } from './pedido.entity';
 import { PedidoItem } from './pedido-item.entity';
 import { CreatePedidoDto } from './dto/create-pedido.dto';

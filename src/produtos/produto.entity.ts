@@ -14,4 +14,13 @@ export class Produto {
 
   @Property()
   estoque: number;
+
+  constructor(data: {
+    id?: number;
+    nome: string;
+    preco: number;
+    estoque: number;
+  }) {
+    Object.assign(this, data);
+  }
 }
