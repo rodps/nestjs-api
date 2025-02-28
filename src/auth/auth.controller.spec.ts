@@ -17,7 +17,7 @@ describe('AuthController', () => {
   };
 
   const mockAuthService = {
-    signIn: jest.fn(() => 'token'),
+    signIn: jest.fn(() => ({ accessToken: 'token' })),
   };
 
   beforeEach(async () => {
@@ -33,10 +33,6 @@ describe('AuthController', () => {
 
     controller = module.get<AuthController>(AuthController);
     authService = module.get<AuthService>(AuthService);
-  });
-
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
   });
 
   describe('login', () => {

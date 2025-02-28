@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AdminService } from 'src/admin/admin.service';
 import { PasswordService } from 'src/admin/password.service';
 import { JwtPayload } from './types/jwt-payload';
+import { JwtDto } from './dto/jwt.dto';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +13,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async signIn(email: string, pass: string): Promise<string> {
+  async signIn(email: string, pass: string): Promise<JwtDto> {
     const user = await this.adminService.findOneByEmail(email);
 
     const isSamePass = await this.passwordService.comparePassword(
@@ -25,6 +26,8 @@ export class AuthService {
     }
 
     const payload: JwtPayload = { sub: user.id, username: user.username };
-    return await this.jwtService.signAsync(payload);
+    return {
+      accessToken: await this.jwtService.signAsync(payload),
+    };
   }
 }

@@ -68,8 +68,10 @@ describe('AuthService', () => {
       ).rejects.toThrow(UnauthorizedException);
     });
 
-    it('should return a JWT token', async () => {
-      expect(await authService.signIn('test@email.com', 'pass')).toBe('token');
+    it('should return a JwtDto', async () => {
+      expect(await authService.signIn('test@email.com', 'pass')).toEqual({
+        accessToken: 'token',
+      });
     });
 
     it('should call findOneByEmail with correct arguments', async () => {
