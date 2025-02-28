@@ -66,5 +66,18 @@ describe('PedidoEntity', () => {
         PedidoNaoEstaEmComposicaoError,
       );
     });
+
+    it('should replace the item if it already exists', async () => {
+      const pedido = new Pedido(cliente, 'Rua 1');
+      const pedidoItem = new PedidoItem(pedido, produto, 1);
+      await pedido.addItem(pedidoItem);
+
+      const pedidoItem2 = new PedidoItem(pedido, produto, 2);
+      await pedido.addItem(pedidoItem2);
+
+      expect(pedido.itens.length).toBe(1);
+      expect(pedido.itens[0]).toEqual(pedidoItem2);
+      expect(pedido.valorTotal).toBe(20);
+    });
   });
 });
