@@ -1,4 +1,4 @@
 import { EntityRepository } from '@mikro-orm/postgresql';
-import { Pedido } from './pedido.entity';
+import { Pedido } from './entities/pedido.entity';
 
 export class PedidosRepository extends EntityRepository<Pedido> {}

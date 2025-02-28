@@ -7,10 +7,10 @@ import {
   Property,
   wrap,
 } from '@mikro-orm/core';
-import { Cliente } from '../clientes/cliente.entity';
+import { Cliente } from '../../clientes/cliente.entity';
 import { PedidoItem } from './pedido-item.entity';
-import { PedidosRepository } from './pedidos.repository';
-import { PedidoNaoEstaEmComposicaoError } from './errors/PedidoNaoEstaEmComposicao.error';
+import { PedidosRepository } from '../pedidos.repository';
+import { PedidoNaoEstaEmComposicaoError } from '../errors/PedidoNaoEstaEmComposicao.error';
 
 export enum PedidoStatus {
   EM_COMPOSICAO = 1,

@@ -1,9 +1,9 @@
 import { Cliente } from 'src/clientes/cliente.entity';
-import { PedidoItem } from './pedido-item.entity';
-import { Pedido } from './pedido.entity';
+import { PedidoItem } from '../entities/pedido-item.entity';
+import { Pedido } from '../entities/pedido.entity';
 import { Produto } from 'src/produtos/produto.entity';
-import { QuantidadeZeroError } from './errors/QuantidadeZeroError';
-import { EstoqueInsuficienteError } from './errors/EstoqueInsuficiente.error';
+import { QuantidadeZeroError } from '../errors/QuantidadeZeroError';
+import { EstoqueInsuficienteError } from '../errors/EstoqueInsuficiente.error';
 
 describe('PedidoItemEntity', () => {
   const cliente = new Cliente({

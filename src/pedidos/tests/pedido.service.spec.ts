@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
-import { PedidosService } from './pedidos.service';
-import { PedidosRepository } from './pedidos.repository';
+import { PedidosService } from '../pedidos.service';
+import { PedidosRepository } from '../pedidos.repository';
 import { ClientesRepository } from 'src/clientes/clientes.repository';
 import { ProdutoRepository } from 'src/produtos/produto.repository';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Produto } from 'src/produtos/produto.entity';
 import { Cliente } from 'src/clientes/cliente.entity';
-import { Pedido } from './pedido.entity';
-import { PedidoItem } from './pedido-item.entity';
-import { CreatePedidoDto } from './dto/create-pedido.dto';
+import { Pedido } from '../entities/pedido.entity';
+import { PedidoItem } from '../entities/pedido-item.entity';
+import { CreatePedidoDto } from '../dto/create-pedido.dto';
 
 const pedidoMock = {
   id: 1,
   addItem: jest.fn(),
 };
-jest.mock('./pedido.entity', () => {
+jest.mock('../entities/pedido.entity', () => {
   return {
     Pedido: jest.fn().mockImplementation(() => pedidoMock),
   };
@@ -24,7 +24,7 @@ jest.mock('./pedido.entity', () => {
 const pedidoItemMock = {
   id: 1,
 };
-jest.mock('./pedido-item.entity', () => {
+jest.mock('../entities/pedido-item.entity', () => {
   return {
     PedidoItem: jest.fn().mockImplementation(() => pedidoItemMock),
   };

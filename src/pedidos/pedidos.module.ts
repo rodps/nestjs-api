@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PedidosController } from './pedidos.controller';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { Pedido } from './pedido.entity';
+import { Pedido } from './entities/pedido.entity';
 import { Cliente } from '../clientes/cliente.entity';
 import { Produto } from '../produtos/produto.entity';
 import { PedidosService } from './pedidos.service';
