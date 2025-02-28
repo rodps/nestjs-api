@@ -21,6 +21,15 @@ export enum PedidoStatus {
   CANCELADO = 6,
 }
 
+const PEDIDO_STATUS_DESCRICAO = {
+  [PedidoStatus.EM_COMPOSICAO]: 'Em composição',
+  [PedidoStatus.AGUARDANDO_PAGAMENTO]: 'Aguardando pagamento',
+  [PedidoStatus.PAGAMENTO_CONFIRMADO]: 'Pagamento confirmado',
+  [PedidoStatus.EM_TRANSPORTE]: 'Em transporte',
+  [PedidoStatus.ENTREGUE]: 'Entregue',
+  [PedidoStatus.CANCELADO]: 'Cancelado',
+};
+
 @Entity({ repository: () => PedidosRepository })
 export class Pedido {
   @PrimaryKey()
@@ -52,6 +61,11 @@ export class Pedido {
 
   @Property({ nullable: true })
   dataEntrega: Date;
+
+  @Property({ name: 'statusDescricao' })
+  getStatusDescricao(): string {
+    return PEDIDO_STATUS_DESCRICAO[this.status];
+  }
 
   constructor(cliente: Cliente, endereco: string) {
     this.cliente = cliente;
