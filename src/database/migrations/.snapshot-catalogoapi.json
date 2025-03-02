@@ -75,8 +75,8 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "nome": {
-          "name": "nome",
+        "name": {
+          "name": "name",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -95,8 +95,8 @@
           "length": 255,
           "mappedType": "string"
         },
-        "telefone": {
-          "name": "telefone",
+        "phone": {
+          "name": "phone",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -105,8 +105,8 @@
           "length": 255,
           "mappedType": "string"
         },
-        "endereco": {
-          "name": "endereco",
+        "address": {
+          "name": "address",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -116,7 +116,7 @@
           "mappedType": "string"
         }
       },
-      "name": "cliente",
+      "name": "customer",
       "schema": "public",
       "indexes": [
         {
@@ -124,13 +124,13 @@
             "email"
           ],
           "composite": false,
-          "keyName": "cliente_email_unique",
+          "keyName": "customer_email_unique",
           "constraint": true,
           "primary": false,
           "unique": true
         },
         {
-          "keyName": "cliente_pkey",
+          "keyName": "customer_pkey",
           "columnNames": [
             "id"
           ],
@@ -155,8 +155,8 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "cliente_id": {
-          "name": "cliente_id",
+        "customer_id": {
+          "name": "customer_id",
           "type": "int",
           "unsigned": false,
           "autoincrement": false,
@@ -164,8 +164,8 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "endereco": {
-          "name": "endereco",
+        "address": {
+          "name": "address",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -174,8 +174,8 @@
           "length": 255,
           "mappedType": "string"
         },
-        "valor_total": {
-          "name": "valor_total",
+        "total_value": {
+          "name": "total_value",
           "type": "numeric(10,2)",
           "unsigned": false,
           "autoincrement": false,
@@ -196,8 +196,8 @@
           "default": "1",
           "mappedType": "smallint"
         },
-        "data_pedido": {
-          "name": "data_pedido",
+        "order_date": {
+          "name": "order_date",
           "type": "timestamptz",
           "unsigned": false,
           "autoincrement": false,
@@ -206,8 +206,8 @@
           "length": 6,
           "mappedType": "datetime"
         },
-        "data_entrega": {
-          "name": "data_entrega",
+        "delivery_date": {
+          "name": "delivery_date",
           "type": "timestamptz",
           "unsigned": false,
           "autoincrement": false,
@@ -217,11 +217,11 @@
           "mappedType": "datetime"
         }
       },
-      "name": "pedido",
+      "name": "order",
       "schema": "public",
       "indexes": [
         {
-          "keyName": "pedido_pkey",
+          "keyName": "order_pkey",
           "columnNames": [
             "id"
           ],
@@ -233,16 +233,16 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "pedido_cliente_id_foreign": {
-          "constraintName": "pedido_cliente_id_foreign",
+        "order_customer_id_foreign": {
+          "constraintName": "order_customer_id_foreign",
           "columnNames": [
-            "cliente_id"
+            "customer_id"
           ],
-          "localTableName": "public.pedido",
+          "localTableName": "public.order",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "public.cliente",
+          "referencedTableName": "public.customer",
           "updateRule": "cascade"
         }
       },
@@ -259,8 +259,8 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "nome": {
-          "name": "nome",
+        "name": {
+          "name": "name",
           "type": "varchar(255)",
           "unsigned": false,
           "autoincrement": false,
@@ -269,8 +269,8 @@
           "length": 255,
           "mappedType": "string"
         },
-        "preco": {
-          "name": "preco",
+        "price": {
+          "name": "price",
           "type": "double precision",
           "unsigned": false,
           "autoincrement": false,
@@ -278,8 +278,8 @@
           "nullable": false,
           "mappedType": "double"
         },
-        "estoque": {
-          "name": "estoque",
+        "stock": {
+          "name": "stock",
           "type": "int",
           "unsigned": false,
           "autoincrement": false,
@@ -288,11 +288,11 @@
           "mappedType": "integer"
         }
       },
-      "name": "produto",
+      "name": "product",
       "schema": "public",
       "indexes": [
         {
-          "keyName": "produto_pkey",
+          "keyName": "product_pkey",
           "columnNames": [
             "id"
           ],
@@ -317,8 +317,8 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "pedido_id": {
-          "name": "pedido_id",
+        "order_id": {
+          "name": "order_id",
           "type": "int",
           "unsigned": false,
           "autoincrement": false,
@@ -326,8 +326,8 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "produto_id": {
-          "name": "produto_id",
+        "product_id": {
+          "name": "product_id",
           "type": "int",
           "unsigned": false,
           "autoincrement": false,
@@ -335,8 +335,8 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "quantidade": {
-          "name": "quantidade",
+        "quantity": {
+          "name": "quantity",
           "type": "int",
           "unsigned": false,
           "autoincrement": false,
@@ -344,8 +344,8 @@
           "nullable": false,
           "mappedType": "integer"
         },
-        "valor_unitario": {
-          "name": "valor_unitario",
+        "unit_price": {
+          "name": "unit_price",
           "type": "numeric(10,2)",
           "unsigned": false,
           "autoincrement": false,
@@ -355,8 +355,8 @@
           "scale": 2,
           "mappedType": "decimal"
         },
-        "valor_total": {
-          "name": "valor_total",
+        "total_price": {
+          "name": "total_price",
           "type": "numeric(10,2)",
           "unsigned": false,
           "autoincrement": false,
@@ -367,11 +367,11 @@
           "mappedType": "decimal"
         }
       },
-      "name": "pedido_item",
+      "name": "order_item",
       "schema": "public",
       "indexes": [
         {
-          "keyName": "pedido_item_pkey",
+          "keyName": "order_item_pkey",
           "columnNames": [
             "id"
           ],
@@ -383,29 +383,29 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "pedido_item_pedido_id_foreign": {
-          "constraintName": "pedido_item_pedido_id_foreign",
+        "order_item_order_id_foreign": {
+          "constraintName": "order_item_order_id_foreign",
           "columnNames": [
-            "pedido_id"
+            "order_id"
           ],
-          "localTableName": "public.pedido_item",
+          "localTableName": "public.order_item",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "public.pedido",
+          "referencedTableName": "public.order",
           "deleteRule": "cascade",
           "updateRule": "cascade"
         },
-        "pedido_item_produto_id_foreign": {
-          "constraintName": "pedido_item_produto_id_foreign",
+        "order_item_product_id_foreign": {
+          "constraintName": "order_item_product_id_foreign",
           "columnNames": [
-            "produto_id"
+            "product_id"
           ],
-          "localTableName": "public.pedido_item",
+          "localTableName": "public.order_item",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "public.produto",
+          "referencedTableName": "public.product",
           "updateRule": "cascade"
         }
       },
