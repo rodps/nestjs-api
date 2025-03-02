@@ -3,7 +3,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { CustomersRepository } from './customers.repository';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { CreateCustomerDto } from './dto/create-customer';
-import { Customer } from './customer.entity';
+import { Customer } from '../../common/entities/customer.entity';
 
 @Injectable()
 export class CustomersService {

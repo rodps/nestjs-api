@@ -4,7 +4,7 @@ import { AdminService } from './admin.service';
 import { AdminRepository } from './admin.repository';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Admin } from './admin.entity';
+import { Admin } from '../../common/entities/admin.entity';
 import { PasswordService } from './password.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 

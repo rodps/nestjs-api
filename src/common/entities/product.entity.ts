@@ -1,7 +1,6 @@
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { ProductsRepository } from './products.repository';
 
-@Entity({ repository: () => ProductsRepository })
+@Entity()
 export class Product {
   @PrimaryKey()
   id: number;

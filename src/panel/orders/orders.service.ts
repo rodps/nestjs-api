@@ -1,7 +1,7 @@
 import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Order } from './entities/order.entity';
-import { OrderItem } from './entities/order-item.entity';
+import { Order } from '../../common/entities/order.entity';
+import { OrderItem } from '../../common/entities/order-item.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrdersRepository } from './orders.repository';
 import { CustomersRepository } from 'src/panel/customers/customers.repository';

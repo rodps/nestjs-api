@@ -7,10 +7,9 @@ import {
   Property,
   wrap,
 } from '@mikro-orm/core';
-import { Customer } from '../../customers/customer.entity';
+import { Customer } from './customer.entity';
 import { OrderItem } from './order-item.entity';
-import { OrdersRepository } from '../orders.repository';
-import { OrderNotInCompositionError } from '../errors/order-not-in-composition.error';
+import { OrderNotInCompositionError } from '../../panel/orders/errors/order-not-in-composition.error';
 
 export enum OrderStatus {
   IN_PROGRESS = 1,
@@ -30,7 +29,7 @@ const ORDER_STATUS_DESCRIPTION = {
   [OrderStatus.CANCELED]: 'Canceled',
 };
 
-@Entity({ repository: () => OrdersRepository })
+@Entity()
 export class Order {
   @PrimaryKey()
   id: number;

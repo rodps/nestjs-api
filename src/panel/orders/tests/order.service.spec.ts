@@ -5,17 +5,17 @@ import { OrdersRepository } from '../orders.repository';
 import { CustomersRepository } from 'src/panel/customers/customers.repository';
 import { ProductsRepository } from 'src/panel/products/products.repository';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Product } from 'src/panel/products/product.entity';
-import { Customer } from 'src/panel/customers/customer.entity';
-import { Order } from '../entities/order.entity';
-import { OrderItem } from '../entities/order-item.entity';
+import { Product } from 'src/common/entities/product.entity';
+import { Customer } from 'src/common/entities/customer.entity';
+import { Order } from '../../../common/entities/order.entity';
+import { OrderItem } from '../../../common/entities/order-item.entity';
 import { CreateOrderDto } from '../dto/create-order.dto';
 
 const orderMock = {
   id: 1,
   addItem: jest.fn(),
 };
-jest.mock('../entities/order.entity', () => {
+jest.mock('src/common/entities/order.entity', () => {
   return {
     Order: jest.fn().mockImplementation(() => orderMock),
   };
@@ -24,7 +24,7 @@ jest.mock('../entities/order.entity', () => {
 const orderItemMock = {
   id: 1,
 };
-jest.mock('../entities/order-item.entity', () => {
+jest.mock('src/common/entities/order-item.entity', () => {
   return {
     OrderItem: jest.fn().mockImplementation(() => orderItemMock),
   };

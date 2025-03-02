@@ -1,14 +1,17 @@
 import { Module } from '@nestjs/common';
 import { OrdersController } from './orders.controller';
-import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { Order } from './entities/order.entity';
-import { Customer } from '../customers/customer.entity';
-import { Product } from '../products/product.entity';
 import { OrdersService } from './orders.service';
+import { OrdersRepository } from './orders.repository';
+import { CustomersRepository } from '../customers/customers.repository';
+import { ProductsRepository } from '../products/products.repository';
 
 @Module({
-  imports: [MikroOrmModule.forFeature([Order, Customer, Product])],
   controllers: [OrdersController],
-  providers: [OrdersService],
+  providers: [
+    OrdersService,
+    OrdersRepository,
+    CustomersRepository,
+    ProductsRepository,
+  ],
 })
 export class OrdersModule {}

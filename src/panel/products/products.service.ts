@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ProductsRepository } from './products.repository';
-import { Product } from './product.entity';
+import { Product } from '../../common/entities/product.entity';
 import { EntityManager, wrap } from '@mikro-orm/postgresql';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';

@@ -1,9 +1,9 @@
-import { Customer } from 'src/panel/customers/customer.entity';
-import { OrderItem } from '../entities/order-item.entity';
-import { Order } from '../entities/order.entity';
-import { Product } from 'src/panel/products/product.entity';
-import { QuantityZeroError } from '../errors/quantity-zero.error';
-import { InsufficientStockError } from '../errors/insufficient-stock.error';
+import { Customer } from 'src/common/entities/customer.entity';
+import { OrderItem } from './order-item.entity';
+import { Order } from './order.entity';
+import { Product } from 'src/common/entities/product.entity';
+import { QuantityZeroError } from '../../panel/orders/errors/quantity-zero.error';
+import { InsufficientStockError } from '../../panel/orders/errors/insufficient-stock.error';
 
 describe('OrderItemEntity', () => {
   const customer = new Customer({

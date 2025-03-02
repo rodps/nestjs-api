@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { AdminService } from 'src/panel/admin/admin.service';
 import { PasswordService } from 'src/panel/admin/password.service';
 import { JwtService } from '@nestjs/jwt';
-import { Admin } from 'src/panel/admin/admin.entity';
+import { Admin } from 'src/common/entities/admin.entity';
 import { UnauthorizedException } from '@nestjs/common';
 
 describe('AuthService', () => {

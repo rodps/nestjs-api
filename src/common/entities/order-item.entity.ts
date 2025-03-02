@@ -1,8 +1,8 @@
 import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
-import { InsufficientStockError } from '../errors/insufficient-stock.error';
-import { QuantityZeroError } from '../errors/quantity-zero.error';
+import { InsufficientStockError } from '../../panel/orders/errors/insufficient-stock.error';
+import { QuantityZeroError } from '../../panel/orders/errors/quantity-zero.error';
 import { Order } from './order.entity';
-import { Product } from '../../products/product.entity';
+import { Product } from './product.entity';
 
 @Entity()
 export class OrderItem {
