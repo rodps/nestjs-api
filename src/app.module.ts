@@ -1,28 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import { AdminModule } from './admin/admin.module';
-import { AuthModule } from './auth/auth.module';
 import config from './mikro-orm.config';
-import { AuthGuard } from './auth/auth.guard';
-import { ProdutosModule } from './produtos/produtos.module';
-import { ClientesModule } from './clientes/clientes.module';
-import { PedidosModule } from './pedidos/pedidos.module';
+import { PainelModule } from './painel/painel.module';
 
 @Module({
-  imports: [
-    MikroOrmModule.forRoot(config),
-    AdminModule,
-    AuthModule,
-    ProdutosModule,
-    ClientesModule,
-    PedidosModule,
-  ],
+  imports: [MikroOrmModule.forRoot(config), PainelModule],
   controllers: [],
-  providers: [
-    {
-      provide: 'APP_GUARD',
-      useClass: AuthGuard,
-    },
-  ],
+  providers: [],
 })
 export class AppModule {}

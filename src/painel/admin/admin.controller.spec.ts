@@ -5,6 +5,7 @@ import { AdminService } from './admin.service';
 import { Admin } from './admin.entity';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { RequestMethod } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
 
 describe('Admin Controller', () => {
   let adminController: AdminController;
@@ -40,6 +41,7 @@ describe('Admin Controller', () => {
           useValue: mockAdminService,
         },
       ],
+      imports: [JwtModule.register({})],
     }).compile();
 
     adminController = moduleRef.get<AdminController>(AdminController);

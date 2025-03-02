@@ -4,6 +4,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { RequestMethod } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
+import { JwtModule } from '@nestjs/jwt';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -29,6 +30,7 @@ describe('AuthController', () => {
           useValue: mockAuthService,
         },
       ],
+      imports: [JwtModule],
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
@@ -60,12 +62,6 @@ describe('AuthController', () => {
       jest.spyOn(authService, 'signIn').mockRejectedValueOnce(new Error());
 
       await expect(controller.login(loginDto)).rejects.toThrow();
-    });
-
-    it('should be public', () => {
-      expect(
-        Reflect.getMetadata('isPublic', AuthController.prototype.login),
-      ).toBe(true);
     });
 
     it('should be a post method', () => {

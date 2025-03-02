@@ -9,13 +9,16 @@ import {
   Patch,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { PedidosService } from './pedidos.service';
 import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
 import { PedidoItemDto } from './dto/pedido-item.dto';
+import { AuthGuard } from '../auth/auth.guard';
 
-@Controller('pedidos')
+@Controller()
+@UseGuards(AuthGuard)
 export class PedidosController {
   constructor(private readonly pedidosService: PedidosService) {}
 

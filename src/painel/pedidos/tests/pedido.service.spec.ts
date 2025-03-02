@@ -2,11 +2,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PedidosService } from '../pedidos.service';
 import { PedidosRepository } from '../pedidos.repository';
-import { ClientesRepository } from 'src/clientes/clientes.repository';
-import { ProdutoRepository } from 'src/produtos/produto.repository';
+import { ClientesRepository } from 'src/painel/clientes/clientes.repository';
+import { ProdutoRepository } from 'src/painel/produtos/produto.repository';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Produto } from 'src/produtos/produto.entity';
-import { Cliente } from 'src/clientes/cliente.entity';
+import { Produto } from 'src/painel/produtos/produto.entity';
+import { Cliente } from 'src/painel/clientes/cliente.entity';
 import { Pedido } from '../entities/pedido.entity';
 import { PedidoItem } from '../entities/pedido-item.entity';
 import { CreatePedidoDto } from '../dto/create-pedido.dto';

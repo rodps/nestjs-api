@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AdminService } from 'src/admin/admin.service';
-import { PasswordService } from 'src/admin/password.service';
+import { AdminService } from 'src/painel/admin/admin.service';
+import { PasswordService } from 'src/painel/admin/password.service';
 import { JwtPayload } from './types/jwt-payload';
 import { JwtDto } from './dto/jwt.dto';
 

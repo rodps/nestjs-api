@@ -1,7 +1,7 @@
-import { Cliente } from 'src/clientes/cliente.entity';
+import { Cliente } from 'src/painel/clientes/cliente.entity';
 import { PedidoItem } from '../entities/pedido-item.entity';
 import { Pedido } from '../entities/pedido.entity';
-import { Produto } from 'src/produtos/produto.entity';
+import { Produto } from 'src/painel/produtos/produto.entity';
 import { QuantidadeZeroError } from '../errors/QuantidadeZeroError';
 import { EstoqueInsuficienteError } from '../errors/EstoqueInsuficiente.error';
 

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { Test } from '@nestjs/testing';
 import { AuthService } from './auth.service';
-import { AdminService } from 'src/admin/admin.service';
-import { PasswordService } from 'src/admin/password.service';
+import { AdminService } from 'src/painel/admin/admin.service';
+import { PasswordService } from 'src/painel/admin/password.service';
 import { JwtService } from '@nestjs/jwt';
-import { Admin } from 'src/admin/admin.entity';
+import { Admin } from 'src/painel/admin/admin.entity';
 import { UnauthorizedException } from '@nestjs/common';
 
 describe('AuthService', () => {

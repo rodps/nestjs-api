@@ -6,11 +6,14 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ClientesService } from './clientes.service';
 import { CreateClienteDto } from './dto/crate-cliente.dto';
+import { AuthGuard } from '../auth/auth.guard';
 
-@Controller('clientes')
+@Controller()
+@UseGuards(AuthGuard)
 export class ClientesController {
   constructor(private readonly clientesService: ClientesService) {}
 

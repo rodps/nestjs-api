@@ -1,10 +1,10 @@
-import { Cliente } from 'src/clientes/cliente.entity';
+import { Cliente } from 'src/painel/clientes/cliente.entity';
 import { Pedido, PedidoStatus } from '../entities/pedido.entity';
-import { Produto } from 'src/produtos/produto.entity';
+import { Produto } from 'src/painel/produtos/produto.entity';
 import { PedidoItem } from '../entities/pedido-item.entity';
 import { Test } from '@nestjs/testing';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import config from '../../mikro-orm.config';
+import config from '../../../mikro-orm.config';
 import { PedidoNaoEstaEmComposicaoError } from '../errors/PedidoNaoEstaEmComposicao.error';
 
 describe('PedidoEntity', () => {

@@ -4,8 +4,8 @@ import { Pedido } from './entities/pedido.entity';
 import { PedidoItem } from './entities/pedido-item.entity';
 import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { PedidosRepository } from './pedidos.repository';
-import { ClientesRepository } from 'src/clientes/clientes.repository';
-import { ProdutoRepository } from 'src/produtos/produto.repository';
+import { ClientesRepository } from 'src/painel/clientes/clientes.repository';
+import { ProdutoRepository } from 'src/painel/produtos/produto.repository';
 import { PedidoItemDto } from './dto/pedido-item.dto';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
 
