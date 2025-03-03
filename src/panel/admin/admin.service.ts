@@ -2,7 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { AdminRepository } from './admin.repository';
 import { Admin } from '../../common/entities/admin.entity';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { PasswordService } from './password.service';
+import { PasswordService } from '../../common/services/password.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 
 @Injectable()

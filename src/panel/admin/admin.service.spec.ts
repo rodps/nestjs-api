@@ -5,7 +5,7 @@ import { AdminRepository } from './admin.repository';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Admin } from '../../common/entities/admin.entity';
-import { PasswordService } from './password.service';
+import { PasswordService } from '../../common/services/password.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 
 describe('AdminService', () => {

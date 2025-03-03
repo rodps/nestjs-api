@@ -4,11 +4,13 @@ import { StoreAccountRepository } from './store-account.repository';
 import { UpdateCustomerDto } from './dto/update-account.dto';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { Customer } from '../../common/entities/customer.entity';
+import { PasswordService } from 'src/common/services/password.service';
 
 @Injectable()
 export class StoreAccountService {
   constructor(
     private readonly accountRepository: StoreAccountRepository,
+    private readonly passwordService: PasswordService,
     private readonly em: EntityManager,
   ) {}
 
@@ -21,6 +23,7 @@ export class StoreAccountService {
     }
     const customer = this.em.create(Customer, {
       ...data,
+      password: await this.passwordService.hashPassword(data.password),
     });
     await this.em.flush();
     return customer;

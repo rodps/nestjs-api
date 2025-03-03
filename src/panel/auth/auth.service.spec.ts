@@ -2,7 +2,7 @@
 import { Test } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { AdminService } from 'src/panel/admin/admin.service';
-import { PasswordService } from 'src/panel/admin/password.service';
+import { PasswordService } from 'src/common/services/password.service';
 import { JwtService } from '@nestjs/jwt';
 import { Admin } from 'src/common/entities/admin.entity';
 import { UnauthorizedException } from '@nestjs/common';
@@ -98,10 +98,15 @@ describe('AuthService', () => {
     it('should call signAsync with correct arguments', async () => {
       await authService.signIn('test@mail.com', 'pass');
 
-      expect(jwtService.signAsync).toHaveBeenCalledWith({
-        sub: mockAdmin.id,
-        username: mockAdmin.username,
-      });
+      expect(jwtService.signAsync).toHaveBeenCalledWith(
+        {
+          sub: mockAdmin.id,
+          username: mockAdmin.username,
+        },
+        {
+          expiresIn: '1d',
+        },
+      );
     });
   });
 });

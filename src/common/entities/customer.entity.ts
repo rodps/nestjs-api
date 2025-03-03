@@ -11,6 +11,9 @@ export class Customer {
   @Property({ unique: true })
   email: string;
 
+  @Property({ hidden: true })
+  password: string;
+
   @Property()
   phone: string;
 

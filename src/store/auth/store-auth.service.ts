@@ -1,20 +1,24 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AdminService } from 'src/panel/admin/admin.service';
 import { PasswordService } from 'src/common/services/password.service';
 import { JwtPayload } from './types/jwt-payload';
 import { JwtDto } from './dto/jwt.dto';
+import { StoreAccountRepository } from '../account/store-account.repository';
 
 @Injectable()
-export class AuthService {
+export class StoreAuthService {
   constructor(
-    private readonly adminService: AdminService,
+    private readonly accountRepository: StoreAccountRepository,
     private readonly passwordService: PasswordService,
     private readonly jwtService: JwtService,
   ) {}
 
-  async signIn(email: string, pass: string): Promise<JwtDto> {
-    const user = await this.adminService.findOneByEmail(email);
+  async login(email: string, pass: string): Promise<JwtDto> {
+    const user = await this.accountRepository.findOne({ email });
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
 
     const isSamePass = await this.passwordService.comparePassword(
       pass,
@@ -25,11 +29,9 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const payload: JwtPayload = { sub: user.id, username: user.username };
+    const payload: JwtPayload = { sub: user.id, username: user.name };
     return {
-      accessToken: await this.jwtService.signAsync(payload, {
-        expiresIn: '1d',
-      }),
+      accessToken: await this.jwtService.signAsync(payload),
     };
   }
 }

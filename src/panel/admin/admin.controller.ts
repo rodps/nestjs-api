@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
-import { Public } from 'src/panel/auth/decorators/public.decorator';
+import { Public } from 'src/common/decorators/public.decorator';
 import { AuthGuard } from '../auth/auth.guard';
 
 @Controller()

@@ -5,13 +5,14 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { jwtConstants } from './constants';
 import { Request } from 'express';
 import { JwtPayload } from './types/jwt-payload';
 import { IS_PUBLIC_KEY } from '../../common/decorators/public.decorator';
 import { Reflector } from '@nestjs/core';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class StoreAuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private reflector: Reflector,
@@ -52,7 +53,7 @@ export class AuthGuard implements CanActivate {
 
   private async extractPayloadFromToken(token: string): Promise<JwtPayload> {
     return await this.jwtService.verifyAsync(token, {
-      secret: 'secret',
+      secret: jwtConstants.secret,
     });
   }
 }

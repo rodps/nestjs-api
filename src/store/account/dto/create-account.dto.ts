@@ -7,6 +7,9 @@ export class CreateAccountDto {
   @IsNotEmpty({ message: 'Email is required' })
   email: string;
 
+  @IsNotEmpty({ message: 'Password is required' })
+  password: string;
+
   @IsNotEmpty({ message: 'Phone is required' })
   phone: string;
 
