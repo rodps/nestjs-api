@@ -2,10 +2,13 @@ import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { Public } from 'src/common/decorators/public.decorator';
-import { AuthGuard } from '../auth/auth.guard';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { UserRole } from 'src/common/enums/roles.enum';
 
 @Controller()
-@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard)
+@Roles([UserRole.ADMIN])
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 

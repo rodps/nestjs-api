@@ -1,5 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { AdminRepository } from './admin.repository';
+import { AdminRepository } from '../../common/repositories/admin.repository';
 import { Admin } from '../../common/entities/admin.entity';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { PasswordService } from '../../common/services/password.service';

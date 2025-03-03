@@ -1,19 +1,13 @@
 import { Module } from '@nestjs/common';
 import { StoreAuthController } from './store-auth.controller';
 import { StoreAuthService } from './store-auth.service';
-import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
-import { StoreAccountRepository } from '../account/store-account.repository';
 import { PasswordService } from 'src/common/services/password.service';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { Customer } from 'src/common/entities/customer.entity';
 
 @Module({
-  imports: [
-    JwtModule.register({
-      secret: jwtConstants.secret,
-      signOptions: { expiresIn: '1d' },
-    }),
-  ],
+  imports: [MikroOrmModule.forFeature([Customer])],
   controllers: [StoreAuthController],
-  providers: [StoreAuthService, StoreAccountRepository, PasswordService],
+  providers: [StoreAuthService, PasswordService],
 })
 export class StoreAuthModule {}

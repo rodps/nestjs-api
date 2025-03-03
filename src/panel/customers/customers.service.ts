@@ -1,6 +1,6 @@
 import { EntityManager, wrap } from '@mikro-orm/postgresql';
 import { ConflictException, Injectable } from '@nestjs/common';
-import { CustomersRepository } from './customers.repository';
+import { CustomersRepository } from '../../common/repositories/customers.repository';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { CreateCustomerDto } from './dto/create-customer';
 import { Customer } from '../../common/entities/customer.entity';

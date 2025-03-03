@@ -1,4 +1,5 @@
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { AdminRepository } from '../repositories/admin.repository';
 
 export type AdminData = {
   id?: number;
@@ -7,7 +8,7 @@ export type AdminData = {
   email: string;
 };
 
-@Entity()
+@Entity({ repository: () => AdminRepository })
 export class Admin {
   @PrimaryKey()
   id: number;

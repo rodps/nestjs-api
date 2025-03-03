@@ -9,11 +9,14 @@ import {
 } from '@nestjs/common';
 import { StoreAccountService } from './store-account.service';
 import { CreateAccountDto } from './dto/create-account.dto';
-import { StoreAuthGuard } from '../auth/store-auth.guard';
 import { Public } from 'src/common/decorators/public.decorator';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { UserRole } from 'src/common/enums/roles.enum';
 
 @Controller()
-@UseGuards(StoreAuthGuard)
+@UseGuards(JwtAuthGuard)
+@Roles([UserRole.STORE])
 export class StoreAccountController {
   constructor(private readonly accountService: StoreAccountService) {}
 

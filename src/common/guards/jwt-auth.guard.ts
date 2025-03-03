@@ -6,15 +6,16 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { JwtPayload } from './types/jwt-payload';
-import { IS_PUBLIC_KEY } from '../../common/decorators/public.decorator';
 import { Reflector } from '@nestjs/core';
+import { JwtPayload } from 'src/common/types/jwt-payload';
+import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
+import { Roles } from '../decorators/roles.decorator';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class JwtAuthGuard implements CanActivate {
   constructor(
-    private jwtService: JwtService,
-    private reflector: Reflector,
+    private readonly jwtService: JwtService,
+    private readonly reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -29,12 +30,18 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException();
     }
 
-    try {
-      request['user'] = await this.extractPayloadFromToken(token);
-    } catch {
+    const payload = await this.extractPayloadFromToken(token);
+    const roles = this.getRoles(context);
+
+    if (!this.validateRole(payload, roles)) {
       throw new UnauthorizedException();
     }
 
+    request['user'] = {
+      id: payload.sub,
+      username: payload.username,
+      role: payload.role,
+    };
     return true;
   }
 
@@ -50,9 +57,22 @@ export class AuthGuard implements CanActivate {
     ]);
   }
 
+  private getRoles(context: ExecutionContext): string[] {
+    return this.reflector.getAllAndOverride<string[]>(Roles, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+  }
+
+  private validateRole(payload: JwtPayload, roles: string[]): boolean {
+    return roles !== undefined && roles.includes(payload.role);
+  }
+
   private async extractPayloadFromToken(token: string): Promise<JwtPayload> {
-    return await this.jwtService.verifyAsync(token, {
-      secret: 'secret',
-    });
+    try {
+      return await this.jwtService.verifyAsync(token);
+    } catch {
+      throw new UnauthorizedException();
+    }
   }
 }

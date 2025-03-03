@@ -3,9 +3,9 @@ import { EntityManager } from '@mikro-orm/postgresql';
 import { Order } from '../../common/entities/order.entity';
 import { OrderItem } from '../../common/entities/order-item.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { OrdersRepository } from './orders.repository';
-import { CustomersRepository } from 'src/panel/customers/customers.repository';
-import { ProductsRepository } from 'src/panel/products/products.repository';
+import { OrdersRepository } from '../../common/repositories/orders.repository';
+import { CustomersRepository } from 'src/common/repositories/customers.repository';
+import { ProductsRepository } from 'src/common/repositories/products.repository';
 import { OrderItemDto } from './dto/order-item.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 

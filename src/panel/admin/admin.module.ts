@@ -2,10 +2,12 @@ import { Module } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { PasswordService } from '../../common/services/password.service';
 import { AdminController } from './admin.controller';
-import { AdminRepository } from './admin.repository';
+import { MikroOrmModule } from '@mikro-orm/nestjs';
+import { Admin } from 'src/common/entities/admin.entity';
 
 @Module({
-  providers: [AdminService, PasswordService, AdminRepository],
+  imports: [MikroOrmModule.forFeature([Admin])],
+  providers: [AdminService, PasswordService],
   exports: [AdminService, PasswordService],
   controllers: [AdminController],
 })

@@ -15,10 +15,13 @@ import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderItemDto } from './dto/order-item.dto';
-import { AuthGuard } from '../auth/auth.guard';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { UserRole } from 'src/common/enums/roles.enum';
 
 @Controller('orders')
-@UseGuards(AuthGuard)
+@UseGuards(JwtAuthGuard)
+@Roles([UserRole.ADMIN])
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 

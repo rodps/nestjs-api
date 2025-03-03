@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
 import { AdminService } from './admin.service';
-import { AdminRepository } from './admin.repository';
+import { AdminRepository } from '../../common/repositories/admin.repository';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Admin } from '../../common/entities/admin.entity';

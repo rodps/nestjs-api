@@ -6,6 +6,7 @@ import { PasswordService } from 'src/common/services/password.service';
 import { JwtService } from '@nestjs/jwt';
 import { Admin } from 'src/common/entities/admin.entity';
 import { UnauthorizedException } from '@nestjs/common';
+import { UserRole } from 'src/common/enums/roles.enum';
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -102,6 +103,7 @@ describe('AuthService', () => {
         {
           sub: mockAdmin.id,
           username: mockAdmin.username,
+          role: UserRole.ADMIN,
         },
         {
           expiresIn: '1d',

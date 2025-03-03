@@ -1,21 +1,21 @@
 import { EntityManager, wrap } from '@mikro-orm/postgresql';
 import { ConflictException, Injectable } from '@nestjs/common';
-import { StoreAccountRepository } from './store-account.repository';
 import { UpdateCustomerDto } from './dto/update-account.dto';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { Customer } from '../../common/entities/customer.entity';
 import { PasswordService } from 'src/common/services/password.service';
+import { CustomersRepository } from 'src/common/repositories/customers.repository';
 
 @Injectable()
 export class StoreAccountService {
   constructor(
-    private readonly accountRepository: StoreAccountRepository,
+    private readonly customersRepository: CustomersRepository,
     private readonly passwordService: PasswordService,
     private readonly em: EntityManager,
   ) {}
 
   async create(data: CreateAccountDto): Promise<Customer> {
-    const exists = await this.accountRepository.findOne({
+    const exists = await this.customersRepository.findOne({
       email: data.email,
     });
     if (exists) {
@@ -30,12 +30,12 @@ export class StoreAccountService {
   }
 
   async findOne(id: number): Promise<Customer> {
-    return this.accountRepository.findOneOrFail(id);
+    return this.customersRepository.findOneOrFail(id);
   }
 
   async update(id: number, data: UpdateCustomerDto): Promise<Customer> {
-    const customer = await this.accountRepository.findOneOrFail(id);
-    const emailExists = await this.accountRepository.findOne({
+    const customer = await this.customersRepository.findOneOrFail(id);
+    const emailExists = await this.customersRepository.findOne({
       email: data.email,
       id: { $ne: id },
     });
@@ -48,7 +48,7 @@ export class StoreAccountService {
   }
 
   async remove(id: number): Promise<void> {
-    const customer = await this.accountRepository.findOneOrFail(id);
+    const customer = await this.customersRepository.findOneOrFail(id);
     await this.em.removeAndFlush(customer);
   }
 }

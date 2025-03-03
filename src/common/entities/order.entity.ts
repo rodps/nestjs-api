@@ -10,6 +10,7 @@ import {
 import { Customer } from './customer.entity';
 import { OrderItem } from './order-item.entity';
 import { OrderNotInCompositionError } from '../../panel/orders/errors/order-not-in-composition.error';
+import { OrdersRepository } from '../repositories/orders.repository';
 
 export enum OrderStatus {
   IN_PROGRESS = 1,
@@ -29,7 +30,7 @@ const ORDER_STATUS_DESCRIPTION = {
   [OrderStatus.CANCELED]: 'Canceled',
 };
 
-@Entity()
+@Entity({ repository: () => OrdersRepository })
 export class Order {
   @PrimaryKey()
   id: number;
