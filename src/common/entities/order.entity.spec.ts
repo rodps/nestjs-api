@@ -5,7 +5,7 @@ import { OrderItem } from './order-item.entity';
 import { Test } from '@nestjs/testing';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import config from '../../mikro-orm.config';
-import { OrderNotInCompositionError } from '../../panel/orders/errors/order-not-in-composition.error';
+import { OrderNotInCompositionError } from './errors/order-not-in-composition.error';
 
 describe('OrderEntity', () => {
   const customer = new Customer({

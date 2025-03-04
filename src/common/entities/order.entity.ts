@@ -9,7 +9,7 @@ import {
 } from '@mikro-orm/core';
 import { Customer } from './customer.entity';
 import { OrderItem } from './order-item.entity';
-import { OrderNotInCompositionError } from '../../panel/orders/errors/order-not-in-composition.error';
+import { OrderNotInCompositionError } from './errors/order-not-in-composition.error';
 import { OrdersRepository } from '../repositories/orders.repository';
 
 export enum OrderStatus {
