@@ -9,19 +9,16 @@ import {
   Patch,
   Post,
   Put,
-  UseGuards,
 } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderItemDto } from './dto/order-item.dto';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { Roles } from 'src/common/decorators/roles.decorator';
 import { UserRole } from 'src/common/enums/roles.enum';
+import { Auth } from 'src/common/decorators/auth.decorator';
 
 @Controller('orders')
-@UseGuards(JwtAuthGuard)
-@Roles([UserRole.ADMIN])
+@Auth(UserRole.ADMIN)
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 

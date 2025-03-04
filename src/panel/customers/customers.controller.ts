@@ -6,17 +6,14 @@ import {
   Param,
   Post,
   Put,
-  UseGuards,
 } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { Roles } from 'src/common/decorators/roles.decorator';
 import { UserRole } from 'src/common/enums/roles.enum';
+import { Auth } from 'src/common/decorators/auth.decorator';
 
 @Controller()
-@UseGuards(JwtAuthGuard)
-@Roles([UserRole.ADMIN])
+@Auth(UserRole.ADMIN)
 export class CustomersController {
   constructor(private readonly clientesService: CustomersService) {}
 

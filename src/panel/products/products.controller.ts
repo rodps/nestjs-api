@@ -8,18 +8,15 @@ import {
   Param,
   Post,
   Put,
-  UseGuards,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
-import { Roles } from 'src/common/decorators/roles.decorator';
 import { UserRole } from 'src/common/enums/roles.enum';
+import { Auth } from 'src/common/decorators/auth.decorator';
 
 @Controller()
-@UseGuards(JwtAuthGuard)
-@Roles([UserRole.ADMIN])
+@Auth(UserRole.ADMIN)
 export class ProductsController {
   constructor(private readonly productService: ProductsService) {}
 
