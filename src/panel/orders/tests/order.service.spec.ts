@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
-import { OrdersService } from './orders.service';
-import { OrdersRepository } from '../../common/repositories/orders.repository';
+import { OrdersService } from '../orders.service';
+import { OrdersRepository } from '../../../common/repositories/orders.repository';
 import { CustomersRepository } from 'src/common/repositories/customers.repository';
 import { ProductsRepository } from 'src/common/repositories/products.repository';
 import { EntityManager } from '@mikro-orm/postgresql';
 import { Product } from 'src/common/entities/product.entity';
 import { Customer } from 'src/common/entities/customer.entity';
-import { Order } from '../../common/entities/order.entity';
-import { OrderItem } from '../../common/entities/order-item.entity';
-import { CreateOrderDto } from './dto/create-order.dto';
+import { Order } from '../../../common/entities/order.entity';
+import { OrderItem } from '../../../common/entities/order-item.entity';
+import { CreateOrderDto } from '../dto/create-order.dto';
 
 const orderMock = {
   id: 1,

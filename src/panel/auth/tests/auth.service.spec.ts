@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { Test } from '@nestjs/testing';
-import { AuthService } from './auth.service';
+import { AuthService } from '../auth.service';
 import { AdminService } from 'src/panel/admin/admin.service';
 import { PasswordService } from 'src/common/services/password.service';
 import { JwtService } from '@nestjs/jwt';

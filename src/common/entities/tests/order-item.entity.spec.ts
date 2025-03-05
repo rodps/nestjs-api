@@ -1,9 +1,9 @@
 import { Customer } from 'src/common/entities/customer.entity';
-import { OrderItem } from './order-item.entity';
-import { Order } from './order.entity';
+import { OrderItem } from '../order-item.entity';
+import { Order } from '../order.entity';
 import { Product } from 'src/common/entities/product.entity';
-import { QuantityZeroError } from './errors/quantity-zero.error';
-import { InsufficientStockError } from './errors/insufficient-stock.error';
+import { QuantityZeroError } from '../errors/quantity-zero.error';
+import { InsufficientStockError } from '../errors/insufficient-stock.error';
 
 describe('OrderItemEntity', () => {
   const customer = new Customer({

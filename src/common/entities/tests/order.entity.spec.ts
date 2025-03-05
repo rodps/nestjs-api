@@ -1,11 +1,11 @@
 import { Customer } from 'src/common/entities/customer.entity';
-import { Order, OrderStatus } from './order.entity';
+import { Order, OrderStatus } from '../order.entity';
 import { Product } from 'src/common/entities/product.entity';
-import { OrderItem } from './order-item.entity';
+import { OrderItem } from '../order-item.entity';
 import { Test } from '@nestjs/testing';
 import { MikroOrmModule } from '@mikro-orm/nestjs';
-import config from '../../mikro-orm.config';
-import { OrderNotInCompositionError } from './errors/order-not-in-composition.error';
+import config from '../../../mikro-orm.config';
+import { OrderNotInCompositionError } from '../errors/order-not-in-composition.error';
 
 describe('OrderEntity', () => {
   const customer = new Customer({

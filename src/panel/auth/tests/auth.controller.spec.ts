@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
+import { AuthController } from '../auth.controller';
+import { AuthService } from '../auth.service';
 import { RequestMethod } from '@nestjs/common';
-import { LoginDto } from './dto/login.dto';
+import { LoginDto } from '../dto/login.dto';
 import { JwtModule } from '@nestjs/jwt';
 
 describe('AuthController', () => {

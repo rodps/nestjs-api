@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
-import { AdminService } from './admin.service';
-import { AdminRepository } from '../../common/repositories/admin.repository';
+import { AdminService } from '../admin.service';
+import { AdminRepository } from '../../../common/repositories/admin.repository';
 import { ConflictException, NotFoundException } from '@nestjs/common';
 import { EntityManager } from '@mikro-orm/postgresql';
-import { Admin } from '../../common/entities/admin.entity';
-import { PasswordService } from '../../common/services/password.service';
-import { CreateAdminDto } from './dto/create-admin.dto';
+import { Admin } from '../../../common/entities/admin.entity';
+import { PasswordService } from '../../../common/services/password.service';
+import { CreateAdminDto } from '../dto/create-admin.dto';
 
 describe('AdminService', () => {
   let adminService: AdminService;
