@@ -3,21 +3,22 @@ import { Product } from '../entities/product.entity';
 import { Pagination } from '../pagination';
 import { Page } from '../page';
 
-export interface FindOptions {
-  order?: { [key: string]: 'asc' | 'desc' };
-}
-
-export interface FindFilters {
+export interface ProductsRepositoryFilters {
   name?: string;
   priceMin?: number;
   priceMax?: number;
 }
 
+export interface ProductsRepositoryOptions {
+  orderBy?: string;
+  sort?: string;
+}
+
 export class ProductsRepository extends EntityRepository<Product> {
   async findBy(
-    filters: FindFilters,
+    filters: ProductsRepositoryFilters,
     pagination: Pagination,
-    options?: FindOptions,
+    options?: ProductsRepositoryOptions,
   ): Promise<Page<Product>> {
     const qb = this.createQueryBuilder('p');
 
@@ -34,8 +35,10 @@ export class ProductsRepository extends EntityRepository<Product> {
 
     const count = await qb.getCount();
 
-    if (options?.order) {
-      qb.orderBy(options.order);
+    if (options?.orderBy) {
+      qb.orderBy({
+        [options.orderBy]: options.sort === 'desc' ? 'DESC' : 'ASC',
+      });
     }
 
     qb.limit(pagination.limit);
