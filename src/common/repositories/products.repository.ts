@@ -1,9 +1,9 @@
 import { EntityRepository } from '@mikro-orm/postgresql';
 import { Product } from '../entities/product.entity';
+import { Pagination } from '../pagination';
+import { Page } from '../page';
 
 export interface FindOptions {
-  limit?: number;
-  offset?: number;
   order?: { [key: string]: 'asc' | 'desc' };
 }
 
@@ -16,8 +16,9 @@ export interface FindFilters {
 export class ProductsRepository extends EntityRepository<Product> {
   async findBy(
     filters: FindFilters,
+    pagination: Pagination,
     options?: FindOptions,
-  ): Promise<Product[]> {
+  ): Promise<Page<Product>> {
     const qb = this.createQueryBuilder('p');
 
     qb.select('*');
@@ -30,16 +31,18 @@ export class ProductsRepository extends EntityRepository<Product> {
     if (filters.priceMax) {
       qb.andWhere({ price: { $lte: filters.priceMax } });
     }
+
+    const count = await qb.getCount();
+
     if (options?.order) {
       qb.orderBy(options.order);
     }
-    if (options?.limit) {
-      qb.limit(options.limit);
-    }
-    if (options?.offset) {
-      qb.offset(options.offset);
-    }
 
-    return qb.execute();
+    qb.limit(pagination.limit);
+    qb.offset(pagination.offset);
+
+    const products: Product[] = await qb.execute();
+
+    return new Page(pagination, products, count);
   }
 }

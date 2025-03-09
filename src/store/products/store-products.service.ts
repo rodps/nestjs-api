@@ -5,33 +5,32 @@ import {
   ProductsRepository,
 } from 'src/common/repositories/products.repository';
 import { FindAllDto } from './dto/find-all.dto';
+import { Pagination } from 'src/common/pagination';
+import { Page } from 'src/common/page';
 
 @Injectable()
 export class StoreProductsService {
   constructor(private readonly productsRepository: ProductsRepository) {}
 
-  findAll(query: FindAllDto): Promise<Product[]> {
-    const DEFAULT_LIMIT = 10;
-
+  async findAll(query: FindAllDto): Promise<Page<Product>> {
+    const page = query.page || 1;
+    const limit = query.limit || 10;
+    const pagination = new Pagination(page, limit);
     const options: FindOptions = {};
-    options.limit = query.limit || DEFAULT_LIMIT;
 
-    if (query.page) {
-      const page = query.page > 0 ? query.page : 1;
-      options.offset = (page - 1) * options.limit;
-    }
     if (query.orderBy) {
       options.order = {
         [query.orderBy]: query.sort === 'desc' ? 'desc' : 'asc',
       };
     }
 
-    return this.productsRepository.findBy(
+    return await this.productsRepository.findBy(
       {
         name: query.search,
         priceMin: query.minPrice,
         priceMax: query.maxPrice,
       },
+      pagination,
       options,
     );
   }

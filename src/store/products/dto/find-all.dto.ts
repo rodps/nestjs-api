@@ -8,6 +8,8 @@ export class FindAllDto {
   page?: number;
 
   @IsOptional()
+  @Min(0)
+  @Type(() => Number)
   limit?: number;
 
   @IsOptional()
